@@ -1,4 +1,4 @@
-package io.capsulo.min808.presentation
+package io.capsulo.min808.features.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +14,11 @@ class HomeActivity : AppCompatActivity() {
     val TAG: String? = HomeActivity::class.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.setContentView(R.layout.home_activity)
+        super.setContentView(R.layout.base_activity)
         super.onCreate(savedInstanceState)
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.home_activity, HomeFragment.newInstance())
+            .add(R.id.base_activity, HomeFragment.newInstance())
             .commit()
     }
 

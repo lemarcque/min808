@@ -1,14 +1,13 @@
-package io.capsulo.min808.presentation
+package io.capsulo.min808.features.home
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import io.capsulo.min808.R
-import kotlinx.android.synthetic.main.home_fragment.*
+import io.capsulo.min808.core.navigation.Navigator
 
 /**
  * Display the logo
@@ -19,6 +18,7 @@ class HomeFragment : Fragment() {
     val TAG: String = HomeFragment::class.java.simpleName
 
     companion object {
+        // Factory method
         fun newInstance() = HomeFragment()
     }
 
@@ -30,36 +30,26 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(TAG, "View displayed")
-        init()
+        setInterface()
     }
 
-    fun init() {
+    /**
+     * Configuration of the user interface elements.
+     */
+    private fun setInterface() {
         var counter = 0
-        val interval = 9L // 1/10 Second
-        val MAX_TIME = 36 // 1 second
-        val MILESTONE = MAX_TIME / 4 // 250
+        val interval = 500L
         val handler = Handler()
 
-        // Bitmap
-        var index = 0
-        val img = arrayOf(
-            R.drawable.logo_4,
-            R.drawable.logo_3,
-            R.drawable.logo_2,
-            R.drawable.logo_1
-        )
-
-        Handler().postDelayed(object : Runnable {
+        // Start a timer
+        handler.postDelayed(object : Runnable {
+            val MAX_COUNT = 3
             override fun run() {
-                if(counter < MAX_TIME) {
-                    if(counter % MILESTONE == 0) {
-                        imageview_logo_home.background = activity!!.getDrawable(img[index])
-                        index++
-                    }
-
+                if(counter < MAX_COUNT) {
                     handler.postDelayed(this, interval)
                     counter++
+                }else {
+                    Navigator.showListNote(context!!)
                 }
             }
         }, interval)
