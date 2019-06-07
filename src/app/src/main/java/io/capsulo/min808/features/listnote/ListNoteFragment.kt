@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
 import io.capsulo.min808.core.navigation.Navigator
 import kotlinx.android.synthetic.main.listnote_fragment.*
@@ -34,14 +35,14 @@ class ListNoteFragment : Fragment() {
         setInterface()
     }
 
-    /**
-     * Configuration of the user interface components.
-     */
     private fun setInterface() {
-
-        // click on fab
+        // handle click on fab
         fab_listnote.setOnClickListener { Navigator.showInsertNote(context!!) }
     }
 
+    fun showMessage(message: String) {
+        val view = activity!!.findViewById<View>(android.R.id.content)
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+    }
 
 }

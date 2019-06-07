@@ -1,5 +1,6 @@
 package io.capsulo.min808.core.navigation
 
+import android.app.Activity
 import android.content.Context
 import io.capsulo.min808.features.insertnote.InsertNoteActivity
 import io.capsulo.min808.features.listnote.ListNoteActivity
@@ -22,7 +23,8 @@ class Navigator {
          * Goes to the <InsertNote> screen.
          */
         fun showInsertNote(context: Context) {
-            context.startActivity(InsertNoteActivity.callingIntent(context))
+            val activity = context as Activity
+            activity.startActivityForResult(InsertNoteActivity.callingIntent(context), InsertNoteActivity.INSERT_NOTE_REQUEST)
         }
     }
 }

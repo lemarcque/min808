@@ -8,16 +8,18 @@ import polanski.option.Option
 /**
  * Interactor for the use case of saving note in database.
  */
-class StoreNote : ReactiveInteractor.SendInteractor<String, String> {
+class StoreNote(private val repository: NoteRepository) : ReactiveInteractor.SendInteractor<String, String> {
 
-    // Temp
-    private val repository: NoteRepository =
-        NoteRepository()
 
+    val INPUT_EMPTY_ERROR = "Input text is empty."
 
     override fun getSingle(params: Option<String>): Single<String> {
-        params.ifSome { repository.fetchUserDraft(it) }
-        return Single.just("The input text is empty.")
+        var s = ""
+        params.ifSome { s = it}
+        return if(s.isNotEmpty()) repository.insertNote(s).andThen(Single.just("Ok"))
+            else Single.error(Throwable(INPUT_EMPTY_ERROR))
+
+        // TODO : NPE
     }
 
 }

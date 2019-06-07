@@ -1,17 +1,23 @@
 package io.capsulo.min808.core.data
 
-import io.reactivex.Single
+import io.capsulo.base.data.store.Store
+import io.capsulo.min808.core.data.room.NoteEntity
+import io.reactivex.Completable
 
 /**
  * Interface that make abstraction to the multiple data sources access. (Data Source API)
  */
-class NoteRepository {
+class NoteRepository(val store: Store<String, NoteEntity>) {
+
+
 
     /**
      * Store data in database store.
      **/
-    fun fetchUserDraft(textContent: String) : Single<String> {
-        return Single.just("Note saved.")
+    fun insertNote(textContent: String) : Completable {
+        // map text to [NoteEntity]
+        val entity = NoteEntity(textContent, 0)
+        return store.putSingular(entity)
     }
 
 }

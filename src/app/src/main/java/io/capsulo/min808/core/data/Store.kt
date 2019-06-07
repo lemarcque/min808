@@ -1,6 +1,8 @@
 package io.capsulo.base.data.store
 
+import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Single
 
 /**
  * Interface for any type of store. Don't implement this directly,
@@ -15,8 +17,8 @@ interface Store<Key, Value> {
 
     fun getSingular(key: Key) : Maybe<Value>
     fun getAll() : Maybe<List<Value>>
-    fun putSingular(value: Value)
-    fun putAl(valueList: List<Value>)
+    fun putSingular(value: Value): Completable
+    fun putAll(valueList: List<Value>): Completable
     fun clear()
 
 
