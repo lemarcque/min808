@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="20dp"
+    android:paddingHorizontal="40dp"
+    android:layout_marginBottom="40dp">
+
+
+    <!-- Button : Drag / Drop -->
+    <ImageButton
+        android:id="@+id/btn_move_listnote_item"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_more_vert_gray"
+        android:contentDescription="drap and drop button" />
+
+    <!-- Container -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical"
+        android:layout_toEndOf="@+id/btn_move_listnote_item">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title_listnote_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/opensans_bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            tools:text="Molestiae non recusandae. Itaque earum"/>
+
+        <!-- content -->
+        <TextView
+            android:id="@+id/content_listnote_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/opensans_regular"
+            android:textSize="13sp"
+            android:textColor="#a3a3a3"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="m rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. " />
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/date_listnote_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:textSize="13sp"
+            android:textColor="#c2c2c2"
+            tools:text="Mon 13 Jun 2019"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
