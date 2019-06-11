@@ -17,7 +17,7 @@ abstract class Min808Database : RoomDatabase() {
 
         @Volatile
         private var INSTANCE : Min808Database? = null
-        private var DB_NAME: String  = "lambda_database"
+        private var DB_NAME: String  = "min808_database"
 
         fun getDatabase(context: Context): Min808Database {
             val tempInstance = INSTANCE

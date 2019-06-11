@@ -46,14 +46,13 @@ class InsertNoteFragment(private val viewModel: InsertNoteViewModel) : Fragment(
     }
 
     private fun setInterface() {
-
         // configuration of app bar
         toolbar_insertnote.inflateMenu(R.menu.appbar_insertnote)
         toolbar_insertnote.setNavigationIcon(R.drawable.ic_close_black_24dp)
         toolbar_insertnote.setNavigationOnClickListener { activity?.finish() }
         toolbar_insertnote.setOnMenuItemClickListener {
             when(it.itemId) {
-                R.id.action_publish_insertnote -> { viewModel.storeNote(edittext_note_insertnote.text.toString()); true }
+                R.id.action_publish_insertnote -> { viewModel.storeNote(edittext_note_insertnote.text.toString());true }
                 else -> super.onOptionsItemSelected(it)
             }
         }

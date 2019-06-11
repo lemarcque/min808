@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import io.capsulo.min808.R
 import io.capsulo.min808.core.data.DatabaseStore
 import io.capsulo.min808.core.data.NoteRepository
-import io.capsulo.min808.features.listnote.StoreNote
 
 /**
  * Responsible to displaying a text area to insert note.

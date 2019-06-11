@@ -1,9 +1,8 @@
 package io.capsulo.min808.features.insertnote
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.capsulo.min808.features.listnote.StoreNote
+import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +12,7 @@ import polanski.option.Option
  * Class that provide data to the UI and survive configuration changes.
  * Acts as a communication center between the Repository and the UI.
  */
-class InsertNoteViewModel(val interactor: StoreNote) : ViewModel() {
+class InsertNoteViewModel(private val interactor: StoreNote) : ViewModel() {
 
 
     private var insertionMessageStatusLiveData: MutableLiveData<String>? = null
@@ -51,8 +50,9 @@ class InsertNoteViewModel(val interactor: StoreNote) : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                Consumer {insertionStatusLiveData?.postValue(true) }
-                , Consumer { insertionMessageStatusLiveData?.postValue(it.message) })
+                { insertionStatusLiveData?.postValue(true) },
+                { insertionMessageStatusLiveData?.postValue(it.message) }
+            )
     }
 
 }

@@ -1,6 +1,8 @@
 package io.capsulo.base.data.store
 
+import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 
 
 /**
@@ -14,14 +16,16 @@ interface ReactiveStore<Key, Value> {
     // Get
     fun getSingular(model: Key) : Observable<Value>
 
-    fun getAll() : Observable<List<Value>>
+    fun getAll() : Single<List<Value>>
 
     // Put
 
-    fun storeSingular(model: Value)
+    fun storeSingular(model: Value): Completable
 
-    fun storeAll(modelList: List<Value>)
+    fun storeAll(modelList: List<Value>): Completable
 
     fun replaceAll(modelList: List<Value>)
+
+    fun clear()
 
 }

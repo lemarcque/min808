@@ -7,22 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
+import io.capsulo.min808.core.data.room.Min808Database
 import io.capsulo.min808.core.navigation.Navigator
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.listnote_fragment.*
 
 /**
  *  Display a list all notes stored.
  */
-class ListNoteFragment : Fragment() {
+class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment() {
 
     // Variable
     val TAG: String = ListNoteFragment::class.java.simpleName
 
     companion object {
-        fun newInstance() = ListNoteFragment()
+        // Factory method
+        fun newInstance(viewModel: ListNoteViewModel) = ListNoteFragment(viewModel)
     }
 
     override fun onCreateView(
@@ -36,17 +41,25 @@ class ListNoteFragment : Fragment() {
         setInterface()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.getNotesLiveData().observe(this, Observer {
+            val adapter = recyclerview_listnote.adapter as ListNoteAdapter
+            adapter.update(it)
+        })
+    }
+
     private fun setInterface() {
 
         // configuration of app bar
-        //toolbar_listnote.inflateMenu(R.menu.appbar_listnote)
+        toolbar_listnote.inflateMenu(R.menu.appbar_listnote)
 
         // handle click on fab
         fab_listnote.setOnClickListener { Navigator.showInsertNote(context!!) }
 
         // config recycler view
         // TODO : Mock
-        val list = listOf(
+        /*val list = listOf(
             Note("Computer Science", "L'informatique est un domaine d'activité scientifique, technique et industriel concernant le traitement automatique de l'information par l'exécution de programmes informatiques par des machines", "10.06.2019"),
             Note("L'art", "L’art est une activité, le produit de cette activité ou l'idée que l'on s'en fait s'adressant délibérément aux sens, aux émotions, aux intuitions et à l'intellect. On peut affirmer que l'art est le propre de l'humain ou de toute autre conscience, ", "12.06.2019"),
             Note("Leonardo", "Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore.", "13.06.2019"),
@@ -56,17 +69,23 @@ class ListNoteFragment : Fragment() {
             Note("Leonardo", "ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit, qui in ea voluptate velit esse, quam ", "13.06.2019"),
             Note("Leonardo", "blanditiis praesentium voluptatum deleniti atque corrupti, quos dolores et quas molestias excepturi sint, obcaecati cupiditate non provident, similique sunt in ", "13.06.2019"),
             Note("Leonardo", "culpa, qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta ", "13.06.2019")
-        )
+        )*/
 
         recyclerview_listnote.apply {
-            adapter = ListNoteAdapter(list)
+            adapter = ListNoteAdapter()
             layoutManager = LinearLayoutManager(context)
         }
     }
 
-    fun showMessage(message: String) {
+    fun showSnackbarMessage(message: String) {
         val view = activity!!.findViewById<View>(android.R.id.content)
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
+
+    fun refreshList() {
+        viewModel.getNotes()
+    }
+
+
 
 }

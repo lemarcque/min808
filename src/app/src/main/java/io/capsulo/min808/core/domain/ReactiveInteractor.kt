@@ -1,5 +1,6 @@
 package io.capsulo.min808.core.domain
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import polanski.option.Option
@@ -21,7 +22,7 @@ interface ReactiveInteractor {
     interface RetrieveInteractor<Param, Object> :
         ReactiveInteractor {
 
-        fun getBehaviorStream(params: Param) : Observable<Object>
+        fun getBehaviorStream(params: Param) : Single<Object>
     }
 
     /**
@@ -38,7 +39,7 @@ interface ReactiveInteractor {
 
     interface SendInteractor<Params, Result> {
 
-        fun getSingle(params: Option<Params>): Single<Result>
+        fun getSingle(params: Option<Params>): Completable
     }
 
 }

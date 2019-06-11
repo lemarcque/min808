@@ -8,18 +8,26 @@ import androidx.recyclerview.widget.RecyclerView
 import io.capsulo.min808.R
 
 /**
- * Todo : Add class description
+ * Populate the data into RecyclerVoew
  */
-class ListNoteAdapter(notes: List<Note>) : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
+class ListNoteAdapter() : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
 
-    var listNote: List<Note> = notes
+    lateinit var listNote: List<Note>
 
+    constructor(notes: List<Note>): this() {
+        listNote = notes
+    }
+
+    /**
+     * Stores multiple Views inside the tag field of the Layout
+     * so they can be immediately loaded.
+     */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun setData(note: Note) {
-            itemView.findViewById<TextView>(R.id.title_listnote_item).setText(note.title)
-            itemView.findViewById<TextView>(R.id.content_listnote_item).setText(note.content)
-            itemView.findViewById<TextView>(R.id.date_listnote_item).setText(note.date)
+            itemView.findViewById<TextView>(R.id.title_listnote_item).text = note.title
+            itemView.findViewById<TextView>(R.id.content_listnote_item).text = note.content
+            itemView.findViewById<TextView>(R.id.date_listnote_item).text = note.date
         }
     }
 
@@ -83,6 +91,9 @@ class ListNoteAdapter(notes: List<Note>) : RecyclerView.Adapter<ListNoteAdapter.
         holder.setData(listNote[position])
     }
 
-    fun update(notes: List<Note>) { listNote = notes }
+    fun update(notes: List<Note>) {
+        listNote = notes
+        notifyDataSetChanged()
+    }
 
 }

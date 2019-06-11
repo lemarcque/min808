@@ -19,7 +19,6 @@ abstract class NoteDao {
     @Insert
     abstract fun storeAll(notes: List<NoteEntity>): Completable
 
-
     @Insert
     abstract fun storeSingular(note: NoteEntity): Completable
 
