@@ -20,19 +20,21 @@ class StoreNote(private val repository: NoteRepository): ReactiveInteractor.Send
     override fun getSingle(params: Option<String>): Completable {
         var raw = ""
         lateinit var note: Note
+        var title = ""
+        var content = ""
 
         params.ifSome {
             raw = it
             val list = it.split(SEPARATOR).toTypedArray().toMutableList()
-            val title = list.removeAt(0)
-            val content = list.toTypedArray().joinToString(SEPARATOR)
+            title = list.removeAt(0)
+            content = list.toTypedArray().joinToString(SEPARATOR)
             val dateInMillis = Calendar.getInstance().timeInMillis
 
             // Create instance of  Note
             note = Note(title, content, dateInMillis)
         }
 
-        return if(raw.isNotEmpty()) repository.insertNote(note)
+        return if(raw.isNotEmpty() && title.isNotEmpty()) repository.insertNote(note)
             else Completable.error(Throwable(INPUT_EMPTY_ERROR))
 
         // TODO : NPE

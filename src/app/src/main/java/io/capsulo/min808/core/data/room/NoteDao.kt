@@ -10,7 +10,7 @@ import io.reactivex.Single
 @Dao
 abstract class NoteDao {
 
-    @Query("SELECT * FROM t_note")
+    @Query("SELECT * FROM t_note ORDER BY date DESC")
     abstract fun getAll(): Single<List<NoteEntity>>
 
     @Query("SELECT * FROM t_note WHERE id =:id")

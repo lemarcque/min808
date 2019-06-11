@@ -10,11 +10,11 @@ import io.capsulo.min808.R
 /**
  * Populate the data into RecyclerVoew
  */
-class ListNoteAdapter() : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
+class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
 
-    lateinit var listNote: List<Note>
+    private var listNote: List<NoteView> = listOf()
 
-    constructor(notes: List<Note>): this() {
+    constructor(notes: List<NoteView>, listener: OnItemClickListener): this(listener) {
         listNote = notes
     }
 
@@ -22,13 +22,21 @@ class ListNoteAdapter() : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
      * Stores multiple Views inside the tag field of the Layout
      * so they can be immediately loaded.
      */
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun setData(note: Note) {
+        fun setData(note: NoteView) {
             itemView.findViewById<TextView>(R.id.title_listnote_item).text = note.title
             itemView.findViewById<TextView>(R.id.content_listnote_item).text = note.content
             itemView.findViewById<TextView>(R.id.date_listnote_item).text = note.date
         }
+
+        fun setEvent() {
+            itemView.setOnClickListener { this@ListNoteAdapter.listener.onClick() }
+        }
+    }
+
+    interface OnItemClickListener {
+        fun onClick()
     }
 
     /**
@@ -89,9 +97,10 @@ class ListNoteAdapter() : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setData(listNote[position])
+        holder.setEvent()
     }
 
-    fun update(notes: List<Note>) {
+    fun update(notes: List<NoteView>) {
         listNote = notes
         notifyDataSetChanged()
     }

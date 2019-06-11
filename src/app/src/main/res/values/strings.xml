@@ -6,4 +6,5 @@
     <string name="empty"></string>
     <string name="appbar_search">Search</string>
     <string name="appbar_publish">Publish</string>
+    <string name="appbar_bookmark">bookmark</string>
 </resources>

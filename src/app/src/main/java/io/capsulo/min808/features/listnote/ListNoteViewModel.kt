@@ -15,15 +15,15 @@ import polanski.option.Option.none
  */
 class ListNoteViewModel(val interactor: RetrieveNoteList) : ViewModel() {
 
-    private var notesLiveData: MutableLiveData<List<Note>>? = null
+    private var notesLiveData: MutableLiveData<List<NoteView>>? = null
 
 
-    fun getNotesLiveData(): MutableLiveData<List<Note>> {
+    fun getNotesLiveData(): MutableLiveData<List<NoteView>> {
         if(notesLiveData == null) {
             notesLiveData = MutableLiveData()
             getNotes()
         }
-        return notesLiveData as MutableLiveData<List<Note>>
+        return notesLiveData as MutableLiveData<List<NoteView>>
     }
 
     fun getNotes() {
@@ -33,7 +33,7 @@ class ListNoteViewModel(val interactor: RetrieveNoteList) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .toObservable()
             .flatMap { Observable.fromIterable(it) }
-            .map { Note(it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
+            .map { NoteView(it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
             .toList()
             .doOnSuccess { notesLiveData?.postValue(it) }
             .subscribe()
