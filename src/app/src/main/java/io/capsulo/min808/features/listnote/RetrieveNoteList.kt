@@ -12,9 +12,7 @@ import polanski.option.Option
  * Todo : Add class description
  */
 class RetrieveNoteList(private  val repository: NoteRepository):
-        ReactiveInteractor.RetrieveInteractor<Option<Void>, List<NoteEntity>> {
-
-
+        ReactiveInteractor.RetrieveInteractor<Void, List<NoteEntity>> {
 
     override fun getBehaviorStream(params: Option<Void>): Single<List<NoteEntity>> = repository.getNoteList()
 /*{

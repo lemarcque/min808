@@ -12,16 +12,34 @@
         android:id="@+id/toolbar_notedetails"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="30dp"
         android:background="@android:color/white"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
-    <!-- TextView : Content -->
+    <!-- Text : Title -->
     <TextView
+        android:id="@+id/textview_title_notedetails"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="30dp"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        tools:text="@string/notedetails_mock_title"/>
 
+    <!-- Texr : Content -->
+    <TextView
+        android:id="@+id/textview_content_notedetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="30dp"
+        android:paddingTop="20dp"
+        android:textSize="@dimen/text_note_size"
+        android:textIsSelectable="true"
+        android:fontFamily="@font/baskerville"
+        tools:text="@string/notedetails_mock_content" />
 
 </LinearLayout>

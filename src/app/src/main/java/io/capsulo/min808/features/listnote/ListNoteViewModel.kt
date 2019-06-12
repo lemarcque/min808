@@ -33,7 +33,7 @@ class ListNoteViewModel(val interactor: RetrieveNoteList) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .toObservable()
             .flatMap { Observable.fromIterable(it) }
-            .map { NoteView(it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
+            .map { NoteView(it.id, it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
             .toList()
             .doOnSuccess { notesLiveData?.postValue(it) }
             .subscribe()

@@ -5,6 +5,7 @@ package io.capsulo.min808.features.listnote
  */
 data class NoteView(
     //val position: Int,
+    val id: Int?,
     val title: String?,
     val content: String?,
     val date: String

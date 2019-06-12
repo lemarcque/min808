@@ -7,25 +7,19 @@ import io.capsulo.min808.core.utils.CalendarUtils
 import io.reactivex.Observable
 import io.reactivex.Single
 import polanski.option.Option
+import kotlin.math.sin
 
 /**
- * Todo : Add class description
+ * Get a no from his id
  */
 class RetrieveNote(private  val repository: NoteRepository):
-        ReactiveInteractor.RetrieveInteractor<Option<Void>, List<NoteEntity>> {
+        ReactiveInteractor.RetrieveInteractor<Int, NoteEntity> {
 
 
-
-    override fun getBehaviorStream(params: Option<Void>): Single<List<NoteEntity>> = repository.getNoteList()
-/*{
-        return Single.fromObservable {
-            repository
-                .getNoteList()
-                .toObservable()
-                .flatMap { Observable.fromIterable(it) }
-                .map { Note(it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
-                .toList()
-        }
-    }*/
+    override fun getBehaviorStream(params: Option<Int>): Single<NoteEntity> {
+        var single: Single<NoteEntity>? = null
+        params.ifSome { single = repository.getNote(it) }
+        return single ?: Single.error(Throwable("The parameter 'id' is required to perform a request"))
+    }
 
 }

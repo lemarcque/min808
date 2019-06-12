@@ -13,12 +13,10 @@ import io.reactivex.Single
 /**
  * Store that hold data in a SQLLite database.
  */
-class DatabaseStore(private val context: Context) : ReactiveStore<String, NoteEntity> {
+class DatabaseStore(private val context: Context) : ReactiveStore<Int, NoteEntity> {
 
 
-    override fun getSingular(model: String): Observable<NoteEntity> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getSingular(model: Int): Single<NoteEntity> = Min808Database.getDatabase(context).noteDao().getSingular(model)
 
     override fun getAll(): Single<List<NoteEntity>> = Min808Database.getDatabase(context).noteDao().getAll()
 

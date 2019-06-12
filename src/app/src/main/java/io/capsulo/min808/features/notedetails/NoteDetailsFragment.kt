@@ -1,18 +1,21 @@
 package io.capsulo.min808.features.notedetails
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import io.capsulo.min808.R
+import io.capsulo.min808.features.listnote.NoteView
 import kotlinx.android.synthetic.main.notedetails_fragment.*
 
 
 /**
  * Allow to insert a new note in database.
  */
-class NoteDetailsFragment : Fragment() {
+class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment() {
 
 
     // TODO : Temporary variable
@@ -20,11 +23,17 @@ class NoteDetailsFragment : Fragment() {
 
     companion object {
         // Factory method
-        fun newInstance() = NoteDetailsFragment()
+
+        fun newInstance(viewModel: NoteDetailsViewModel) = NoteDetailsFragment(viewModel)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.getNoteLiveData().observe(this, Observer { setNote(it) })
     }
 
     override fun onCreateView(
@@ -38,6 +47,7 @@ class NoteDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setInterface()
+        getNote()
     }
 
     private fun setInterface() {
@@ -62,6 +72,20 @@ class NoteDetailsFragment : Fragment() {
         }
         val layout = layoutInflater.inflate(R.layout.actionbar_title_test, null)
         toolbar_notedetails.addView(layout)
+    }
+
+    fun getNote() {
+        // Retrieve note
+
+        val id: Int = activity?.intent?.getIntExtra(getString(R.string.bundle_intent_id_note), -1) ?: -1
+        if(id > -1) viewModel.getNote(id)
+        else activity!!.finish()
+    }
+
+    fun setNote(note: NoteView) {
+        println(note)
+        textview_title_notedetails.text = Html.fromHtml(note.title, Html.FROM_HTML_MODE_COMPACT)
+        textview_content_notedetails.text = note.content
     }
 
 }

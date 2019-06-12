@@ -22,7 +22,7 @@ interface ReactiveInteractor {
     interface RetrieveInteractor<Param, Object> :
         ReactiveInteractor {
 
-        fun getBehaviorStream(params: Param) : Single<Object>
+        fun getBehaviorStream(params: Option<Param>) : Single<Object>
     }
 
     /**
@@ -34,7 +34,7 @@ interface ReactiveInteractor {
     interface RequestInteractor<Params, Result> :
         ReactiveInteractor {
 
-        fun getSingle(params: Params): Single<Result>
+        fun getSingle(params: Option<Params>): Single<Result>
     }
 
     interface SendInteractor<Params, Result> {

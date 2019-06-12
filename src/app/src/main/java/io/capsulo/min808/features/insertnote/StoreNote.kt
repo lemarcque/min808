@@ -31,7 +31,7 @@ class StoreNote(private val repository: NoteRepository): ReactiveInteractor.Send
             val dateInMillis = Calendar.getInstance().timeInMillis
 
             // Create instance of  Note
-            note = Note(title, content, dateInMillis)
+            note = Note("Henoc Sese", title, content, dateInMillis)
         }
 
         return if(raw.isNotEmpty() && title.isNotEmpty()) repository.insertNote(note)

@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "t_note")
 data class NoteEntity(
+    val author: String?,
     val title: String?,
     var content: String?,
     var date: Long?) {

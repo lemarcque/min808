@@ -1,5 +1,6 @@
 package io.capsulo.min808.features.listnote
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
 import io.capsulo.min808.core.navigation.Navigator
 import kotlinx.android.synthetic.main.listnote_fragment.*
+import androidx.recyclerview.widget.ItemTouchHelper
+import io.capsulo.min808.core.data.Note
+
 
 /**
  *  Display a list all notes stored.
@@ -19,6 +23,7 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
 
     // Variable
     val TAG: String = ListNoteFragment::class.java.simpleName
+    lateinit var mAdapter: ListNoteAdapter
 
     companion object {
         // Factory method
@@ -40,7 +45,7 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
         super.onActivityCreated(savedInstanceState)
         viewModel.getNotesLiveData().observe(this, Observer {
             val adapter = recyclerview_listnote.adapter as ListNoteAdapter
-            adapter.update(it)
+            adapter.update(it.toMutableList())
         })
     }
 
@@ -53,10 +58,15 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
         fab_listnote.setOnClickListener { Navigator.showInsertNote(context!!) }
 
         // config recycler view
+        mAdapter = ListNoteAdapter(this@ListNoteFragment)
         recyclerview_listnote.apply {
-            adapter = ListNoteAdapter(this@ListNoteFragment)
+            adapter = mAdapter
             layoutManager = LinearLayoutManager(context)
         }
+
+        val callback = SimpleItemTouchHelperCallback(mAdapter, context)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerview_listnote)
     }
 
     fun showSnackbarMessage(message: String) {
@@ -66,7 +76,20 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
 
     fun refreshList() = viewModel.getNotes()
 
-    override fun onClick() { Navigator.showNoteContent(context!!) }
+    override fun onClick(id : Int) {
+        val bundle = Bundle()
+        bundle.putInt(getString(R.string.bundle_intent_id_note), id)
+        Navigator.showNoteDetails(context!!, bundle)
+    }
 
+    override fun onItemDelete(position: Int) {
+        // Show snackbar with action
+        val view = activity!!.findViewById<View>(android.R.id.content)
+        Snackbar
+            .make(view, R.string.notedetails_note_deleted, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.notedetails_note_undo_delete) { mAdapter.update(position) }
+            .setActionTextColor(Color.WHITE)
+            .show()
+    }
 
 }
