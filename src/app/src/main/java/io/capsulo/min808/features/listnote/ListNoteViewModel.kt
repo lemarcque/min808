@@ -6,6 +6,7 @@ import io.capsulo.min808.core.utils.CalendarUtils
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import polanski.option.Option
 import polanski.option.Option.none
 
 
@@ -21,14 +22,14 @@ class ListNoteViewModel(val interactor: RetrieveNoteList) : ViewModel() {
     fun getNotesLiveData(): MutableLiveData<List<NoteView>> {
         if(notesLiveData == null) {
             notesLiveData = MutableLiveData()
-            getNotes()
+            getNotes("")
         }
         return notesLiveData as MutableLiveData<List<NoteView>>
     }
 
-    fun getNotes() {
+    fun getNotes(filter: String) {
         interactor
-            .getBehaviorStream(none())
+            .getBehaviorStream(Option.ofObj(filter))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .toObservable()
@@ -36,8 +37,10 @@ class ListNoteViewModel(val interactor: RetrieveNoteList) : ViewModel() {
             .map { NoteView(it.id, it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
             .toList()
             .doOnSuccess { notesLiveData?.postValue(it) }
+            .doOnError { println(it.message) }
             .subscribe()
-
     }
+
+
 
 }

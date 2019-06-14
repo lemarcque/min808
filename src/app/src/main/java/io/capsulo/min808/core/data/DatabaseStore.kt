@@ -15,10 +15,11 @@ import io.reactivex.Single
  */
 class DatabaseStore(private val context: Context) : ReactiveStore<Int, NoteEntity> {
 
-
     override fun getSingular(model: Int): Single<NoteEntity> = Min808Database.getDatabase(context).noteDao().getSingular(model)
 
     override fun getAll(): Single<List<NoteEntity>> = Min808Database.getDatabase(context).noteDao().getAll()
+
+    override fun getAllFilter(filter: String): Single<List<NoteEntity>> = Min808Database.getDatabase(context).noteDao().getAllFilter(filter)
 
     override fun storeSingular(model: NoteEntity): Completable  = Min808Database.getDatabase(context).noteDao().storeSingular(model)
 

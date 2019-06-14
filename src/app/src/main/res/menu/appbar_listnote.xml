@@ -2,13 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="AppCompatResource"
-    tools:context=".presentation.DashboardActivity">
+    tools:context=".presentation.ListNoteActivity">
 
     <!-- Search -->
     <item
         android:id="@+id/action_publish_insertnote"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/appbar_search"
-        android:showAsAction="always" />
+        android:showAsAction="collapseActionView|always"
+        android:actionViewClass="android.widget.SearchView" />
+
 
 </menu>

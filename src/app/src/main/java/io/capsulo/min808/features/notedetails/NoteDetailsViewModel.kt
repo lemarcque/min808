@@ -11,14 +11,14 @@ import polanski.option.Option
 
 class NoteDetailsViewModel(val interactor: RetrieveNote) : ViewModel() {
 
-    private var noteLiveData: MutableLiveData<NoteView>? = null
+    private var noteLiveData: MutableLiveData<NoteDetailsView>? = null
 
 
-    fun getNoteLiveData(): MutableLiveData<NoteView> {
+    fun getNoteLiveData(): MutableLiveData<NoteDetailsView> {
         if(noteLiveData == null) {
             noteLiveData = MutableLiveData()
         }
-        return noteLiveData as MutableLiveData<NoteView>
+        return noteLiveData as MutableLiveData<NoteDetailsView>
     }
 
     fun getNote(id: Int) {
@@ -26,7 +26,6 @@ class NoteDetailsViewModel(val interactor: RetrieveNote) : ViewModel() {
             .getBehaviorStream(Option.ofObj(id))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { NoteView(it.id, it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
             .subscribe(
                 Consumer { noteLiveData?.postValue(it)  },
                 Consumer { println("${NoteDetailsViewModel::class.java} A problem occur when trying to retrieve Note !")   }

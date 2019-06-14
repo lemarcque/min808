@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import io.capsulo.min808.R
 import io.capsulo.min808.features.listnote.NoteView
+import kotlinx.android.synthetic.main.actionbar_title_test.*
 import kotlinx.android.synthetic.main.notedetails_fragment.*
 
 
@@ -76,14 +77,14 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment() {
 
     fun getNote() {
         // Retrieve note
-
         val id: Int = activity?.intent?.getIntExtra(getString(R.string.bundle_intent_id_note), -1) ?: -1
         if(id > -1) viewModel.getNote(id)
         else activity!!.finish()
     }
 
-    fun setNote(note: NoteView) {
-        println(note)
+    fun setNote(note: NoteDetailsView) {
+        textview_author_appbar_notedetails.text = note.author
+        textview_date_appbar_notedetails.text = note.date
         textview_title_notedetails.text = Html.fromHtml(note.title, Html.FROM_HTML_MODE_COMPACT)
         textview_content_notedetails.text = note.content
     }

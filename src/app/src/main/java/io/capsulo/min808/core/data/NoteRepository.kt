@@ -13,6 +13,8 @@ class NoteRepository(val store: DatabaseStore) {
 
     fun getNoteList(): Single<List<NoteEntity>> = store.getAll()
 
+    fun getNoteListFilter(filter: String): Single<List<NoteEntity>> = store.getAllFilter(filter)
+
     fun getNote(id: Int): Single<NoteEntity> = store.getSingular(id)
 
     /**

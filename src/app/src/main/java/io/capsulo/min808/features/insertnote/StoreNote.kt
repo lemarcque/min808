@@ -21,7 +21,7 @@ class StoreNote(private val repository: NoteRepository): ReactiveInteractor.Send
         var raw = ""
         lateinit var note: Note
         var title = ""
-        var content = ""
+        var content: String
 
         params.ifSome {
             raw = it

@@ -19,27 +19,40 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
-    <!-- Text : Title -->
-    <TextView
-        android:id="@+id/textview_title_notedetails"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="30dp"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        tools:text="@string/notedetails_mock_title"/>
+        android:layout_height="match_parent">
 
-    <!-- Texr : Content -->
-    <TextView
-        android:id="@+id/textview_content_notedetails"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="30dp"
-        android:paddingTop="20dp"
-        android:textSize="@dimen/text_note_size"
-        android:textIsSelectable="true"
-        android:fontFamily="@font/baskerville"
-        tools:text="@string/notedetails_mock_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Text : Title -->
+            <TextView
+                android:id="@+id/textview_title_notedetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="30dp"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                tools:text="@string/notedetails_mock_title"/>
+
+            <!-- Text : Content -->
+            <TextView
+                android:id="@+id/textview_content_notedetails"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="30dp"
+                android:paddingTop="20dp"
+                android:textSize="@dimen/text_note_size"
+                android:textIsSelectable="true"
+                android:fontFamily="@font/baskerville"
+                tools:text="@string/notedetails_mock_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>

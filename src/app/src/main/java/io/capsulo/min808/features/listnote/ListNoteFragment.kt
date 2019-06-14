@@ -1,19 +1,21 @@
 package io.capsulo.min808.features.listnote
 
+import android.app.Service
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
 import io.capsulo.min808.core.navigation.Navigator
 import kotlinx.android.synthetic.main.listnote_fragment.*
-import androidx.recyclerview.widget.ItemTouchHelper
-import io.capsulo.min808.core.data.Note
 
 
 /**
@@ -54,6 +56,25 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
         // configuration of app bar
         toolbar_listnote.inflateMenu(R.menu.appbar_listnote)
 
+        // configuration of search bar
+        val searchView = (toolbar_listnote.menu.findItem(R.id.action_publish_insertnote).actionView as SearchView)
+        searchView.apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                override fun onQueryTextChange(s: String?): Boolean {
+                    viewModel.getNotes(s!!)
+                    return true
+                }
+
+                override fun onQueryTextSubmit(s: String?): Boolean {
+                    val imm = activity?.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+                    return true
+                }
+            })
+            //setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        }
+
         // handle click on fab
         fab_listnote.setOnClickListener { Navigator.showInsertNote(context!!) }
 
@@ -74,7 +95,7 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    fun refreshList() = viewModel.getNotes()
+    fun refreshList() = viewModel.getNotes(getString(R.string.empty))
 
     override fun onClick(id : Int) {
         val bundle = Bundle()

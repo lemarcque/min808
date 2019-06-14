@@ -12,9 +12,18 @@ import polanski.option.Option
  * Todo : Add class description
  */
 class RetrieveNoteList(private  val repository: NoteRepository):
-        ReactiveInteractor.RetrieveInteractor<Void, List<NoteEntity>> {
+        ReactiveInteractor.RetrieveInteractor<String, List<NoteEntity>> {
 
-    override fun getBehaviorStream(params: Option<Void>): Single<List<NoteEntity>> = repository.getNoteList()
+    override fun getBehaviorStream(params: Option<String>): Single<List<NoteEntity>> {
+        var single: Single<List<NoteEntity>>? = null
+        var filter: String
+        params.ifSome {
+            single = if(it.isEmpty())
+                repository.getNoteList()
+            else { filter = "%$it%"; repository.getNoteListFilter(filter) }
+        }
+        return single ?: Single.error(Throwable("The parameter 'filter' is required to perform a request"))
+    }
 /*{
         return Single.fromObservable {
             repository
