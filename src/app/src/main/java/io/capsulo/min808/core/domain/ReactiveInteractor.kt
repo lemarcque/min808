@@ -9,6 +9,8 @@ import polanski.option.Option
  * Interfaces for Interactors.
  * This interfaces represent use cases (this means any use case in the application should implement
  * this contract).
+ *
+ * sources : https://github.com/n26/N26AndroidSamples/blob/master/base/src/main/java/de/n26/n26androidsamples/base/domain/ReactiveInteractor.java
  */
 
 interface ReactiveInteractor {
@@ -26,7 +28,7 @@ interface ReactiveInteractor {
     }
 
     /**
-     * The request interactor is used to request some result once. The returned observable is a single, emits once and then completes or errors.
+     * The request retrieveNote is used to request some result once. The returned observable is a single, emits once and then completes or errors.
      * @param <Params> the type of the returned data.
      * @param <Result> required parameters for the request.
     </Result></Params>
@@ -40,6 +42,17 @@ interface ReactiveInteractor {
     interface SendInteractor<Params, Result> {
 
         fun getSingle(params: Option<Params>): Completable
+    }
+
+    /**
+     * The delete retrieveNote is used to delete entities from data layer. The response for the delete operation comes as onNext
+     * event in the returned observable.
+     * @param <Result> the type of the delete response.
+     * @param <Params>   required parameters for the delete.
+    </Params></Result> */
+    interface DeleteInteractor<Params, Result> : ReactiveInteractor {
+
+        fun getSingle(params: Option<Params>): Single<Result>
     }
 
 }

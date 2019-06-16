@@ -25,6 +25,6 @@ abstract class NoteDao {
     @Insert
     abstract fun storeSingular(note: NoteEntity): Completable
 
-    @Delete
-    abstract fun deleteSingular(note: NoteEntity): Completable
+    @Query("DELETE FROM t_note WHERE id = :id")
+    abstract fun deleteSingular(id: Int): Single<Int>
 }

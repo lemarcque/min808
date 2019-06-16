@@ -18,6 +18,8 @@ class NoteDetailsActivity : AppCompatActivity() {
     val TAG: String? = NoteDetailsActivity::class.simpleName
 
     companion object {
+        const val DELETE_NOTE_REQUEST = 2
+
         fun callingIntent(context: Context) = Intent(context, NoteDetailsActivity::class.java)
     }
 
@@ -25,13 +27,12 @@ class NoteDetailsActivity : AppCompatActivity() {
         super.setContentView(R.layout.base_activity)
         super.onCreate(savedInstanceState)
 
+        val repository = NoteRepository(DatabaseStore(this))
+
         supportFragmentManager.beginTransaction().add(R.id.base_activity, NoteDetailsFragment.newInstance(
             NoteDetailsViewModel(
-                RetrieveNote(
-                    NoteRepository(
-                        DatabaseStore(this)
-                    )
-                )
+                RetrieveNote(repository),
+                DeleteNote(repository)
             )
         )).commit()
     }

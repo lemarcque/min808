@@ -27,6 +27,8 @@ class DatabaseStore(private val context: Context) : ReactiveStore<Int, NoteEntit
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    fun removeSingular(model: Int): Single<Int> = Min808Database.getDatabase(context).noteDao().deleteSingular(model)
+
     override fun replaceAll(modelList: List<NoteEntity>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

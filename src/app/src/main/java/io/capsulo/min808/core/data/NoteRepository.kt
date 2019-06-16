@@ -26,4 +26,9 @@ class NoteRepository(val store: DatabaseStore) {
         return store.storeSingular(entity)
     }
 
+    fun deleteNote(id: Int): Single<Int> {
+        // map Note object to [NoteEntity]
+        return store.removeSingular(id)
+    }
+
 }

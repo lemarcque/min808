@@ -32,7 +32,8 @@ class Navigator {
         fun showNoteDetails(context: Context, bundle: Bundle) {
             val intent = NoteDetailsActivity.callingIntent(context)
             intent.putExtras(bundle)
-            context.startActivity(intent)
+            val activity = context as Activity
+            activity.startActivityForResult(intent, NoteDetailsActivity.DELETE_NOTE_REQUEST)
         }
 
     }

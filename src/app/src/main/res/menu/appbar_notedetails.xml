@@ -4,11 +4,23 @@
     tools:ignore="AppCompatResource"
     tools:context=".presentation.DashboardActivity">
 
-    <!-- Bookmak -->
+    <!-- Bookmark -->
     <item
         android:id="@+id/action_bookmark_notedetails"
         android:icon="@drawable/ic_bookmark_border_black_24dp"
         android:title="@string/appbar_bookmark"
         android:showAsAction="always" />
+
+    <!-- Edit -->
+    <item
+        android:id="@+id/action_edit_notedetails"
+        android:title="@string/notedetails_appbar_edit"
+        android:showAsAction="never" />
+
+    <!-- Delete -->
+    <item
+        android:id="@+id/action_delete_notedetails"
+        android:title="@string/notedetails_appbar_delete"
+        android:showAsAction="never" />
 
 </menu>
