@@ -12,5 +12,4 @@
         android:showAsAction="collapseActionView|always"
         android:actionViewClass="android.widget.SearchView" />
 
-
 </menu>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="AppCompatResource"
+    tools:context=".presentation.DashboardActivity">
+
+    <!-- Search -->
+    <item
+        android:id="@+id/action_search_notedetails"
+        android:showAsAction="collapseActionView|always"
+        android:iconifiedByDefault="true"
+        android:actionViewClass="android.widget.SearchView"/>
+
+    <!-- Edit -->
+    <item
+        android:id="@+id/action_search_up_notedetails"
+        android:icon="@drawable/ic_arrow_top_black"
+        android:showAsAction="always" />
+
+    <!-- Delete -->
+    <item
+        android:id="@+id/action_search_down_notedetails"
+        android:icon="@drawable/ic_arrow_down_black"
+        android:showAsAction="always" />
+
+</menu>

@@ -1,17 +1,23 @@
 package io.capsulo.min808.features.notedetails
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.SearchView
+import androidx.core.text.clearSpans
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import io.capsulo.min808.R
-import io.capsulo.min808.features.listnote.NoteView
-import kotlinx.android.synthetic.main.actionbar_title_test.*
+import kotlinx.android.synthetic.main.appbar_title_notedetails.*
 import kotlinx.android.synthetic.main.notedetails_fragment.*
 
 
@@ -24,6 +30,17 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
     // TODO : Temporary variable
     var BOOKMARKED: Boolean = false
     var idItemDisplayed: Int? =  null
+    var contentItemDisplayed: String? =  null
+    var lineNumberChar = mutableListOf<Int>()
+    var pointer = 0
+
+    /**
+     * Define the sens for scorlling when searching a character or wird,
+     */
+    enum class Sens(val value: Int) {
+        UP(-1),
+        DOWN(1)
+    }
 
     companion object {
         // Factory method
@@ -65,16 +82,17 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         toolbar_notedetails.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.action_bookmark_notedetails -> { bookmarkNote(it); true }
+                R.id.action_search_notedetails -> { switchMenu(); true; }
                 R.id.action_edit_notedetails -> { true; }
                 R.id.action_delete_notedetails -> { deleteNote(); true; }
                 else -> false
             }
         }
-        val layout = layoutInflater.inflate(R.layout.actionbar_title_test, null)
+        val layout = layoutInflater.inflate(R.layout.appbar_title_notedetails, null)
         toolbar_notedetails.addView(layout)
     }
 
-    fun getNote() {
+    private fun getNote() {
         // Retrieve note
         val id: Int = activity?.intent?.getIntExtra(getString(R.string.bundle_intent_id_note), -1) ?: -1
         if(id > -1) viewModel.getNote(id)
@@ -87,6 +105,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         textview_date_appbar_notedetails.text = note.date
         textview_title_notedetails.text = Html.fromHtml(note.title, Html.FROM_HTML_MODE_COMPACT)
         textview_content_notedetails.text = note.content
+        contentItemDisplayed = note.content
     }
 
     // TODO : Call ViewModel's method
@@ -106,8 +125,93 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         dialogFragment.show(fragmentManager, "deleteNoteDialog")
     }
 
+    private fun switchMenu() {
+        // Remove old menu
+        toolbar_notedetails.menu.clear()
+        val v = toolbar_notedetails.findViewById<LinearLayout>(R.id.layout_title_appbar_notedetails)
+        toolbar_notedetails.removeView(v)
+
+        // Add new menu
+        toolbar_notedetails.inflateMenu(R.menu.appbar_notedetails_search)
+        val searchView = toolbar_notedetails.menu.findItem(R.id.action_search_notedetails).actionView as SearchView
+        searchView.setIconifiedByDefault(true)
+        searchView.isFocusable = true
+        searchView.isIconified = false
+        searchView.requestFocusFromTouch()
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean { return true}
+
+            override fun onQueryTextChange(s: String?): Boolean {
+                highlight(s!!)
+                return true
+            }
+        })
+
+
+        toolbar_notedetails.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.action_search_up_notedetails -> { scrollToWord(Sens.UP);  true }
+                R.id.action_search_down_notedetails -> { scrollToWord(Sens.DOWN); true }
+                else -> false
+            }
+        }
+    }
+
+    private fun highlight(s: String) {
+        val spannable = SpannableString(textview_content_notedetails.text)
+        spannable.clearSpans()
+
+        lineNumberChar.clear()
+
+        var index = textview_content_notedetails.text.indexOf(s)
+        var lineNumber = textview_content_notedetails.layout.getLineForOffset(index)
+
+        if(index > -1 && s.isNotEmpty()) {
+
+            while (index > -1) {
+                lineNumberChar.add(lineNumber)
+
+                spannable.setSpan(
+                    BackgroundColorSpan(context!!.getColor(R.color.colorTextHightlight)),
+                    index,
+                    index + s.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                index += s.length
+
+                textview_content_notedetails.text = spannable
+                index = textview_content_notedetails.text.indexOf(s, index)
+                lineNumber = textview_content_notedetails.layout.getLineForOffset(index)
+            }
+
+            // scroll to the first occurrences
+            pointer = -1
+            scrollToWord(Sens.DOWN)
+
+        }else {
+            textview_content_notedetails.text = spannable
+        }
+    }
+
+    private fun scrollToWord(sens: Sens) {
+
+        if(lineNumberChar.size > 0) {
+            pointer += sens.value
+
+            if (pointer > lineNumberChar.size - 1) pointer = 0
+            else if(pointer < 0) pointer = lineNumberChar.size - 1
+
+            val pos = lineNumberChar[pointer]
+            val margin = 2
+            val y = textview_content_notedetails.layout.getLineTop(pos + margin)
+            scrollview_notedetails.smoothScrollTo(0, y)
+        }
+    }
+
     override fun onDeleteConfirm() {
         viewModel.deleteNote(idItemDisplayed!!)
     }
+
 
 }

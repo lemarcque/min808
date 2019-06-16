@@ -21,8 +21,9 @@
     <!-- Mock -->
     <string name="notedetails_mock_title">Valar Morghulis</string>
     <string name="notedetails_mock_content">veritatis et quasi <i>architecto</i> beatae vitae dicta sunt, explicabo.\n Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur </string>
-    <string name="notedetails_appbar_delete">delete</string>
-    <string name="notedetails_appbar_edit">edit</string>
+    <string name="notedetails_appbar_delete">Delete</string>
+    <string name="notedetails_appbar_edit">Edit</string>
+    <string name="notedetails_appbar_search">Search</string>
 
     <string name="notedetails_note_deleted">Note deleted.</string>
     <string name="notedetails_note_undo_delete">Undo</string>
