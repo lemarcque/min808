@@ -1,22 +1,21 @@
 package io.capsulo.min808.features.notedetails
 
 import android.app.Activity
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Html
-import android.text.Spannable
-import android.text.SpannableString
+import android.text.*
 import android.text.style.BackgroundColorSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.SearchView
+import android.widget.Toolbar
 import androidx.core.text.clearSpans
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import io.capsulo.min808.R
+import io.capsulo.min808.core.presentation.BaseFragment
 import kotlinx.android.synthetic.main.appbar_title_notedetails.*
 import kotlinx.android.synthetic.main.notedetails_fragment.*
 
@@ -24,7 +23,7 @@ import kotlinx.android.synthetic.main.notedetails_fragment.*
 /**
  * Allow to insert a new note in database.
  */
-class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), DeleteNoteDialogFragment.OnDeleteNoteClickListener {
+class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(), DeleteNoteDialogFragment.OnDeleteNoteClickListener {
 
 
     // TODO : Temporary variable
@@ -33,13 +32,19 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
     var contentItemDisplayed: String? =  null
     var lineNumberChar = mutableListOf<Int>()
     var pointer = 0
+    var inSearchMode = Mode.VIEW
 
     /**
-     * Define the sens for scorlling when searching a character or wird,
+     * Define the sens for scrolling when searching a character or word,
      */
     enum class Sens(val value: Int) {
         UP(-1),
         DOWN(1)
+    }
+
+    enum class Mode(val value: Int) {
+        VIEW(1),
+        SEARCH(2),
     }
 
     companion object {
@@ -56,7 +61,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         super.onActivityCreated(savedInstanceState)
         viewModel.getNoteLiveData().observe(this, Observer { setNote(it) })
         viewModel.getNoteDeletedLiveData().observe(this, Observer {
-            activity!!.setResult(Activity.RESULT_OK);
+            activity!!.setResult(Activity.RESULT_OK)
             activity?.finish() })
     }
 
@@ -75,6 +80,50 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
     }
 
     private fun setInterface() {
+        displayNormalMenu()
+    }
+
+    private fun displaySearchMenu() {
+        // Remove old menu
+        toolbar_notedetails.menu.clear()
+        val v = toolbar_notedetails.findViewById<LinearLayout>(R.id.layout_title_appbar_notedetails)
+        toolbar_notedetails.removeView(v)
+
+        // Add new menu
+        toolbar_notedetails.inflateMenu(R.menu.appbar_notedetails_search)
+        val searchLayout = layoutInflater.inflate(R.layout.appbar_search_notedetails, null)
+        val params = Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT)
+        toolbar_notedetails.addView(searchLayout, params)
+
+        // handle text changing
+        val editText = toolbar_notedetails.findViewById<EditText>(R.id.edittext_search_appbar_notedetails)
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {  highlight(s.toString()) }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+        })
+        editText.requestFocus()
+        inSearchMode = Mode.SEARCH
+
+        toolbar_notedetails.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.action_search_up_notedetails -> { scrollNext(Sens.UP);  true }
+                R.id.action_search_down_notedetails -> { scrollNext(Sens.DOWN); true }
+                else -> false
+            }
+        }
+    }
+
+    private fun displayNormalMenu() {
+        // Remove old menu
+        toolbar_notedetails.menu.clear()
+        val v = toolbar_notedetails.findViewById<FrameLayout>(R.id.layout_search_appbar_notedetails)
+        toolbar_notedetails.removeView(v)
+
+        // Add new menu
         // configuration of app bar
         toolbar_notedetails.inflateMenu(R.menu.appbar_notedetails)
         toolbar_notedetails.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
@@ -82,7 +131,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         toolbar_notedetails.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.action_bookmark_notedetails -> { bookmarkNote(it); true }
-                R.id.action_search_notedetails -> { switchMenu(); true; }
+                R.id.action_search_notedetails -> { displaySearchMenu(); true; }
                 R.id.action_edit_notedetails -> { true; }
                 R.id.action_delete_notedetails -> { deleteNote(); true; }
                 else -> false
@@ -91,6 +140,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         val layout = layoutInflater.inflate(R.layout.appbar_title_notedetails, null)
         toolbar_notedetails.addView(layout)
     }
+
 
     private fun getNote() {
         // Retrieve note
@@ -107,6 +157,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         textview_content_notedetails.text = note.content
         contentItemDisplayed = note.content
     }
+
 
     // TODO : Call ViewModel's method
     private fun bookmarkNote(item: MenuItem) {
@@ -125,47 +176,15 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
         dialogFragment.show(fragmentManager, "deleteNoteDialog")
     }
 
-    private fun switchMenu() {
-        // Remove old menu
-        toolbar_notedetails.menu.clear()
-        val v = toolbar_notedetails.findViewById<LinearLayout>(R.id.layout_title_appbar_notedetails)
-        toolbar_notedetails.removeView(v)
-
-        // Add new menu
-        toolbar_notedetails.inflateMenu(R.menu.appbar_notedetails_search)
-        val searchView = toolbar_notedetails.menu.findItem(R.id.action_search_notedetails).actionView as SearchView
-        searchView.setIconifiedByDefault(true)
-        searchView.isFocusable = true
-        searchView.isIconified = false
-        searchView.requestFocusFromTouch()
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean { return true}
-
-            override fun onQueryTextChange(s: String?): Boolean {
-                highlight(s!!)
-                return true
-            }
-        })
-
-
-        toolbar_notedetails.setOnMenuItemClickListener {
-            when(it.itemId) {
-                R.id.action_search_up_notedetails -> { scrollToWord(Sens.UP);  true }
-                R.id.action_search_down_notedetails -> { scrollToWord(Sens.DOWN); true }
-                else -> false
-            }
-        }
-    }
 
     private fun highlight(s: String) {
+        clearHighlight()
+
         val spannable = SpannableString(textview_content_notedetails.text)
-        spannable.clearSpans()
-
-        lineNumberChar.clear()
-
         var index = textview_content_notedetails.text.indexOf(s)
         var lineNumber = textview_content_notedetails.layout.getLineForOffset(index)
 
+        // Word founded
         if(index > -1 && s.isNotEmpty()) {
 
             while (index > -1) {
@@ -187,14 +206,24 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
 
             // scroll to the first occurrences
             pointer = -1
-            scrollToWord(Sens.DOWN)
+            scrollNext(Sens.DOWN)
 
-        }else {
-            textview_content_notedetails.text = spannable
+        }
+        // No word found
+        else {
+            clearHighlight()
+            scrollview_notedetails.smoothScrollTo(0, 0)
         }
     }
 
-    private fun scrollToWord(sens: Sens) {
+    private fun clearHighlight() {
+        val spannable = SpannableString(textview_content_notedetails.text)
+        spannable.clearSpans()
+        lineNumberChar.clear()
+        textview_content_notedetails.text = spannable
+    }
+
+    private fun scrollNext(sens: Sens) {
 
         if(lineNumberChar.size > 0) {
             pointer += sens.value
@@ -211,6 +240,22 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : Fragment(), Del
 
     override fun onDeleteConfirm() {
         viewModel.deleteNote(idItemDisplayed!!)
+    }
+
+    override fun onBackPressed(): Boolean {
+        when(inSearchMode) {
+            Mode.SEARCH -> {
+                inSearchMode = Mode.VIEW
+
+                val editText = toolbar_notedetails.findViewById<EditText>(R.id.edittext_search_appbar_notedetails)
+                editText.clearFocus()
+                scrollview_notedetails.smoothScrollTo(0, 0)
+                clearHighlight()
+                displayNormalMenu()
+            }
+            Mode.VIEW ->  activity!!.finish()
+        }
+        return true
     }
 
 

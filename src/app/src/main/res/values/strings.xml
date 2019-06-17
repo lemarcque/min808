@@ -27,4 +27,5 @@
 
     <string name="notedetails_note_deleted">Note deleted.</string>
     <string name="notedetails_note_undo_delete">Undo</string>
+    <string name="notedetails_appbar_hint_search">Search...</string>
 </resources>

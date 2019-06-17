@@ -5,13 +5,6 @@
     tools:ignore="AppCompatResource"
     tools:context=".presentation.DashboardActivity">
 
-    <!-- Search -->
-    <item
-        android:id="@+id/action_search_notedetails"
-        android:showAsAction="collapseActionView|always"
-        android:iconifiedByDefault="true"
-        android:actionViewClass="android.widget.SearchView"/>
-
     <!-- Edit -->
     <item
         android:id="@+id/action_search_up_notedetails"

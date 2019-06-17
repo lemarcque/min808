@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import io.capsulo.min808.R
 import io.capsulo.min808.core.data.DatabaseStore
 import io.capsulo.min808.core.data.NoteRepository
+import io.capsulo.min808.core.presentation.BaseFragment
 
 
 /**
@@ -35,6 +36,20 @@ class NoteDetailsActivity : AppCompatActivity() {
                 DeleteNote(repository)
             )
         )).commit()
+    }
+
+    override fun onBackPressed() {
+
+        val fragmentList = supportFragmentManager.fragments
+        var handled = false
+
+        for(fragment in fragmentList) {
+            if(fragment is BaseFragment) handled = fragment.onBackPressed()
+            if(handled) break
+        }
+
+        if(!handled) super.onBackPressed()
+
     }
 
 }
