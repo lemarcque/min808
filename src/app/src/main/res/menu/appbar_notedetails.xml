@@ -19,11 +19,6 @@
         android:showAsAction="collapseActionView"
         android:actionViewClass="android.widget.SearchView"/>
 
-    <!-- Edit -->
-    <item
-        android:id="@+id/action_edit_notedetails"
-        android:title="@string/notedetails_appbar_edit"
-        android:showAsAction="never" />
 
     <!-- Delete -->
     <item

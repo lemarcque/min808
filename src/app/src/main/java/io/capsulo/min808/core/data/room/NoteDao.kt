@@ -1,9 +1,6 @@
 package io.capsulo.min808.core.data.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -24,6 +21,9 @@ abstract class NoteDao {
 
     @Insert
     abstract fun storeSingular(note: NoteEntity): Completable
+
+    @Query("UPDATE t_note SET content=:content, title=:title WHERE id=:id")
+    abstract fun replaceSingular(id: Int, title:String, content: String): Completable
 
     @Query("DELETE FROM t_note WHERE id = :id")
     abstract fun deleteSingular(id: Int): Single<Int>

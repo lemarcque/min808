@@ -15,6 +15,7 @@ import android.widget.Toolbar
 import androidx.core.text.clearSpans
 import androidx.lifecycle.Observer
 import io.capsulo.min808.R
+import io.capsulo.min808.core.navigation.Navigator
 import io.capsulo.min808.core.presentation.BaseFragment
 import kotlinx.android.synthetic.main.appbar_title_notedetails.*
 import kotlinx.android.synthetic.main.notedetails_fragment.*
@@ -23,13 +24,12 @@ import kotlinx.android.synthetic.main.notedetails_fragment.*
 /**
  * Allow to insert a new note in database.
  */
-class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(), DeleteNoteDialogFragment.OnDeleteNoteClickListener {
+class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFragment(), DeleteNoteDialogFragment.OnDeleteNoteClickListener {
 
 
     // TODO : Temporary variable
     var BOOKMARKED: Boolean = false
-    var idItemDisplayed: Int? =  null
-    var contentItemDisplayed: String? =  null
+    var noteView: NoteDetailsView? = null
     var lineNumberChar = mutableListOf<Int>()
     var pointer = 0
     var inSearchMode = Mode.VIEW
@@ -59,10 +59,12 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.getNoteLiveData().observe(this, Observer { setNote(it) })
-        viewModel.getNoteDeletedLiveData().observe(this, Observer {
+        viewModel.noteLiveData?.observe(this, Observer { setNote(it) })
+        viewModel.noteDeletedLiveDeta?.observe(this, Observer {
             activity!!.setResult(Activity.RESULT_OK)
             activity?.finish() })
+
+        viewModel.noteUpdatedLiveDeta?.observe(this, Observer { activity!!.setResult(NoteDetailsActivity.UPDATE_RESULT_CODE); activity?.finish() })
     }
 
     override fun onCreateView(
@@ -99,11 +101,8 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
         val editText = toolbar_notedetails.findViewById<EditText>(R.id.edittext_search_appbar_notedetails)
         editText.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {  highlight(s.toString()) }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-            override fun afterTextChanged(s: Editable?) {
-
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
         })
         editText.requestFocus()
         inSearchMode = Mode.SEARCH
@@ -127,12 +126,11 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
         // configuration of app bar
         toolbar_notedetails.inflateMenu(R.menu.appbar_notedetails)
         toolbar_notedetails.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-        toolbar_notedetails.setNavigationOnClickListener { activity?.finish() }
+        toolbar_notedetails.setNavigationOnClickListener { if(!updateNote()) activity!!.finish() }
         toolbar_notedetails.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.action_bookmark_notedetails -> { bookmarkNote(it); true }
                 R.id.action_search_notedetails -> { displaySearchMenu(); true; }
-                R.id.action_edit_notedetails -> { true; }
                 R.id.action_delete_notedetails -> { deleteNote(); true; }
                 else -> false
             }
@@ -140,7 +138,6 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
         val layout = layoutInflater.inflate(R.layout.appbar_title_notedetails, null)
         toolbar_notedetails.addView(layout)
     }
-
 
     private fun getNote() {
         // Retrieve note
@@ -150,12 +147,12 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
     }
 
     private fun setNote(note: NoteDetailsView) {
-        idItemDisplayed = note.id
+        noteView = note
+
         textview_author_appbar_notedetails.text = note.author
         textview_date_appbar_notedetails.text = note.date
-        textview_title_notedetails.text = Html.fromHtml(note.title, Html.FROM_HTML_MODE_COMPACT)
-        textview_content_notedetails.text = note.content
-        contentItemDisplayed = note.content
+        textview_title_notedetails.setText(note.title)
+        textview_content_notedetails.setText(note.content)
     }
 
 
@@ -168,6 +165,24 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
         }
 
         BOOKMARKED = !BOOKMARKED
+    }
+
+    private fun updateNote(): Boolean {
+        if(textview_title_notedetails.text.toString() != noteView?.title ||
+            textview_content_notedetails.text.toString() != noteView?.content
+        ) {
+            viewModel.updateNote(
+                NoteDetailsView(
+                    noteView?.id,
+                    textview_title_notedetails.text.toString(),
+                    textview_content_notedetails.text.toString(),
+                    noteView?.author,
+                    noteView?.date!!)
+            )
+            return true
+        }
+
+        return false
     }
 
     private fun deleteNote() {
@@ -190,16 +205,14 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
             while (index > -1) {
                 lineNumberChar.add(lineNumber)
 
-                spannable.setSpan(
-                    BackgroundColorSpan(context!!.getColor(R.color.colorTextHightlight)),
+                spannable.setSpan(BackgroundColorSpan(context!!.getColor(R.color.colorTextHightlight)),
                     index,
                     index + s.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                textview_content_notedetails.setText(spannable)
 
                 index += s.length
-
-                textview_content_notedetails.text = spannable
                 index = textview_content_notedetails.text.indexOf(s, index)
                 lineNumber = textview_content_notedetails.layout.getLineForOffset(index)
             }
@@ -220,7 +233,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
         val spannable = SpannableString(textview_content_notedetails.text)
         spannable.clearSpans()
         lineNumberChar.clear()
-        textview_content_notedetails.text = spannable
+        textview_content_notedetails.setText(spannable)
     }
 
     private fun scrollNext(sens: Sens) {
@@ -239,7 +252,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
     }
 
     override fun onDeleteConfirm() {
-        viewModel.deleteNote(idItemDisplayed!!)
+        viewModel.deleteNote(noteView?.id!!)
     }
 
     override fun onBackPressed(): Boolean {
@@ -253,7 +266,7 @@ class NoteDetailsFragment(val viewModel: NoteDetailsViewModel) : BaseFragment(),
                 clearHighlight()
                 displayNormalMenu()
             }
-            Mode.VIEW ->  activity!!.finish()
+            Mode.VIEW -> if(!updateNote()) activity!!.finish()
         }
         return true
     }

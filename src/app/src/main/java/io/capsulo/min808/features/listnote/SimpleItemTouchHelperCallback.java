@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.capsulo.min808.R;
 
 /**
- * Todo : Add class description
+ *  Contract between ItemTouchHelper and your application.
+ *  Let control which touch behaviors are enabled per each ViewHolder and also receive callbacks when user performs these actions.
  */
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
@@ -41,7 +42,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
   @Override
   public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
     int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-    int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+    int swipeFlags = ItemTouchHelper.START;
     return makeMovementFlags(dragFlags, swipeFlags);
   }
 
@@ -79,6 +80,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
     // Swiping to the left
     else if (dX < 0) {
+
       int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
       int iconRight = itemView.getRight() - iconMargin;
       icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);

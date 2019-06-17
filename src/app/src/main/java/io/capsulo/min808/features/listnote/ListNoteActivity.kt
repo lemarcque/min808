@@ -9,6 +9,7 @@ import io.capsulo.min808.R
 import io.capsulo.min808.core.data.DatabaseStore
 import io.capsulo.min808.core.data.NoteRepository
 import io.capsulo.min808.features.insertnote.InsertNoteActivity
+import io.capsulo.min808.features.notedetails.DeleteNote
 import io.capsulo.min808.features.notedetails.NoteDetailsActivity
 
 
@@ -29,13 +30,14 @@ class ListNoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.setContentView(R.layout.base_activity)
         super.onCreate(savedInstanceState)
+
+        val repository = NoteRepository(DatabaseStore(this))
         supportFragmentManager
             .beginTransaction()
             .add(R.id.base_activity, ListNoteFragment.newInstance(
                 ListNoteViewModel(
-                    RetrieveNoteList(
-                        NoteRepository(DatabaseStore(this))
-                    )
+                    RetrieveNoteList(repository),
+                    DeleteNote(repository)
                 )), LISTENOTE_FRAGMENT_TAG)
             .commit()
     }
@@ -53,12 +55,15 @@ class ListNoteActivity : AppCompatActivity() {
                    }
                }
            }
+
+           // TODO : Rename the request code
            NoteDetailsActivity.DELETE_NOTE_REQUEST -> {
                when(resultCode) {
                    Activity.RESULT_OK -> {
                        fragment?.showSnackbarMessage(getString(R.string.listnote_delete_message))
                        fragment?.refreshList()
                    }
+                   NoteDetailsActivity.UPDATE_RESULT_CODE -> fragment?.refreshList()
                }
            }
        }

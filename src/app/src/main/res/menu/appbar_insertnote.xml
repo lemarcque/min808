@@ -4,7 +4,7 @@
     tools:ignore="AppCompatResource"
     tools:context=".presentation.DashboardActivity">
 
-    <!-- Controls -->
+    <!-- Publish -->
     <item
         android:id="@+id/action_publish_insertnote"
         android:title="@string/appbar_publish"

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Update
 import io.capsulo.min808.R
 import io.capsulo.min808.core.data.DatabaseStore
 import io.capsulo.min808.core.data.NoteRepository
@@ -20,6 +21,7 @@ class NoteDetailsActivity : AppCompatActivity() {
 
     companion object {
         const val DELETE_NOTE_REQUEST = 2
+        const val UPDATE_RESULT_CODE = 3
 
         fun callingIntent(context: Context) = Intent(context, NoteDetailsActivity::class.java)
     }
@@ -33,6 +35,7 @@ class NoteDetailsActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.base_activity, NoteDetailsFragment.newInstance(
             NoteDetailsViewModel(
                 RetrieveNote(repository),
+                UpdateNote(repository),
                 DeleteNote(repository)
             )
         )).commit()

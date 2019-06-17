@@ -7,7 +7,7 @@ import io.reactivex.Single
 /**
  * Interface that make abstraction to the multiple data sources access. (Data Source API)
  */
-class NoteRepository(val store: DatabaseStore) {
+class NoteRepository(private val store: DatabaseStore) {
 
 
 
@@ -25,6 +25,8 @@ class NoteRepository(val store: DatabaseStore) {
         val entity = NoteEntity(note.author, note.title, note.content, note.date)
         return store.storeSingular(entity)
     }
+
+    fun updateNote(id: Int, title: String, content: String) = store.replaceSingular(id, title, content)
 
     fun deleteNote(id: Int): Single<Int> {
         // map Note object to [NoteEntity]

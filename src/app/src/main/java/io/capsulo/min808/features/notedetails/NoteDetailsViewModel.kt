@@ -8,29 +8,28 @@ import io.reactivex.schedulers.Schedulers
 import polanski.option.Option
 
 class NoteDetailsViewModel(
-    val retrieveNote: RetrieveNote,
-    val deleteNote: DeleteNote) : ViewModel() {
+    private val retrieveNote: RetrieveNote,
+    private val updateNote: UpdateNote,
+    private val deleteNote: DeleteNote) : ViewModel() {
 
-    private var noteLiveData: MutableLiveData<NoteDetailsView>? = null
-    private var noteDeletedLiveDeta: MutableLiveData<Boolean>? = null
-
-
-    // TODO : Use Getter
-    fun getNoteLiveData(): MutableLiveData<NoteDetailsView> {
-        if(noteLiveData == null) {
-            noteLiveData = MutableLiveData()
+    var noteLiveData: MutableLiveData<NoteDetailsView>? = null
+        get() {
+            if(field == null) field = MutableLiveData()
+            return field as MutableLiveData<NoteDetailsView>
         }
-        return noteLiveData as MutableLiveData<NoteDetailsView>
-    }
 
-
-    // TODO: Use Getter
-    fun getNoteDeletedLiveData(): MutableLiveData<Boolean> {
-        if(noteDeletedLiveDeta == null) {
-            noteDeletedLiveDeta = MutableLiveData()
+    var noteUpdatedLiveDeta: MutableLiveData<Boolean>? = null
+        get() {
+            if(field == null) field = MutableLiveData()
+            return field as MutableLiveData<Boolean>
         }
-        return noteDeletedLiveDeta as MutableLiveData<Boolean>
-    }
+
+    var noteDeletedLiveDeta: MutableLiveData<Boolean>? = null
+        get() {
+            if(field == null) field = MutableLiveData()
+            return field as MutableLiveData<Boolean>
+        }
+
 
     fun getNote(id: Int) = retrieveNote
         .getBehaviorStream(Option.ofObj(id))
@@ -39,6 +38,15 @@ class NoteDetailsViewModel(
         .subscribe(
             { noteLiveData?.postValue(it) },
             { println("${NoteDetailsViewModel::class.java} A problem occur when trying to retrieve Note !")   }
+        )
+
+    fun updateNote(note: NoteDetailsView) = updateNote
+        .getSingle(Option.ofObj(note))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(
+            { noteUpdatedLiveDeta?.postValue(true) },
+            { println("${NoteDetailsViewModel::class.java} A problem occur when trying to update Note !"); noteUpdatedLiveDeta?.postValue(false)   }
         )
 
 

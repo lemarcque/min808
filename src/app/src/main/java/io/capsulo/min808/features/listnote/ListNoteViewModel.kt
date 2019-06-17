@@ -3,6 +3,7 @@ package io.capsulo.min808.features.listnote
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.capsulo.min808.core.utils.CalendarUtils
+import io.capsulo.min808.features.notedetails.DeleteNote
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +15,7 @@ import polanski.option.Option.none
  * Class responsible to provide data to the UI and survive configuration changes.
  * Acts as a communication center between the Repository and the UI.
  */
-class ListNoteViewModel(val interactor: RetrieveNoteList) : ViewModel() {
+class ListNoteViewModel(val interactor: RetrieveNoteList, val deleteNote: DeleteNote) : ViewModel() {
 
     private var notesLiveData: MutableLiveData<List<NoteView>>? = null
 
@@ -40,6 +41,13 @@ class ListNoteViewModel(val interactor: RetrieveNoteList) : ViewModel() {
             .doOnError { println(it.message) }
             .subscribe()
     }
+
+
+    fun deleteNote(id: Int) = deleteNote
+        .getSingle(Option.ofObj(id))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe()
 
 
 

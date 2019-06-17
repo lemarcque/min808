@@ -39,6 +39,13 @@ interface ReactiveInteractor {
         fun getSingle(params: Option<Params>): Single<Result>
     }
 
+
+    /**
+     * Sends changes to data layer.
+     * It returns a [Single] that will emit the result of the send operation.
+     * @param <Result> the type of the send operation result.
+     * @param <Params> required parameters for the send.
+    </Params></Result> */
     interface SendInteractor<Params, Result> {
 
         fun getSingle(params: Option<Params>): Completable
