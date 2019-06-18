@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
 
         // Start a timer
         handler.postDelayed(object : Runnable {
-            val MAX_COUNT = 3
+            val MAX_COUNT = 1
             override fun run() {
                 if(counter < MAX_COUNT) {
                     handler.postDelayed(this, interval)

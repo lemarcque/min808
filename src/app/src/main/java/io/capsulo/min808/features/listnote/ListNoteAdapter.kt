@@ -6,15 +6,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.capsulo.min808.R
+import java.util.*
 
 /**
  * Populate the data into RecyclerVoew
  */
 class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
 
-    private var listNote: List<NoteView> = listOf()
+    private var listNote: MutableList<NoteView> = mutableListOf()
+    private var recentlyDeletedItemPosition: Int = -1
+    private var recentlyDeletedItem: NoteView? = null
 
-    constructor(notes: List<NoteView>, listener: OnItemClickListener): this(listener) {
+    constructor(notes: MutableList<NoteView>, listener: OnItemClickListener): this(listener) {
         listNote = notes
     }
 
@@ -24,19 +27,23 @@ class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<
      */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        private var id: Int = -1
+
         fun setData(note: NoteView) {
+            id = note.id ?: -1
             itemView.findViewById<TextView>(R.id.title_listnote_item).text = note.title
             itemView.findViewById<TextView>(R.id.content_listnote_item).text = note.content
             itemView.findViewById<TextView>(R.id.date_listnote_item).text = note.date
         }
 
         fun setEvent() {
-            itemView.setOnClickListener { this@ListNoteAdapter.listener.onClick() }
+            itemView.setOnClickListener { this@ListNoteAdapter.listener.onClick(id) }
         }
     }
 
     interface OnItemClickListener {
-        fun onClick()
+        fun onClick(id: Int)
+        fun onItemDelete(id: Int)
     }
 
     /**
@@ -100,9 +107,38 @@ class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<
         holder.setEvent()
     }
 
-    fun update(notes: List<NoteView>) {
+    fun onItemDismiss(position: Int) {
+        recentlyDeletedItem = listNote.removeAt(position)
+        notifyItemRemoved(position)
+        recentlyDeletedItemPosition = position
+        listener.onItemDelete(recentlyDeletedItem?.id!!)
+    }
+
+    fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(listNote, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(listNote, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
+
+    fun update(notes: MutableList<NoteView>) {
         listNote = notes
         notifyDataSetChanged()
+    }
+
+    fun update(id: Int) {
+        if(recentlyDeletedItem != null) {
+            listNote.add(recentlyDeletedItemPosition, recentlyDeletedItem!!)
+            recentlyDeletedItem = null
+            notifyItemInserted(recentlyDeletedItemPosition)
+        }
     }
 
 }

@@ -14,9 +14,11 @@ interface ReactiveStore<Key, Value> {
 
 
     // Get
-    fun getSingular(model: Key) : Observable<Value>
+    fun getSingular(model: Key) : Single<Value>
 
-    fun getAll() : Single<List<Value>>
+    fun getAll(): Single<List<Value>>
+
+    fun getAllFilter(filter: String): Single<List<Value>>
 
     // Put
 

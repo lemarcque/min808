@@ -4,7 +4,28 @@
 
     <string name="logo_contentdescription">Logo</string>
     <string name="empty"></string>
-    <string name="appbar_search">Search</string>
+
+    <!-- home -->
+    <!-- insertnote -->
     <string name="appbar_publish">Publish</string>
+
+    <!-- listnote -->
+    <string name="appbar_search">Search</string>
+    <string name="listnote_insert_message">Your note has successfully been saved.</string>
+    <string name="listnote_delete_message">The note has correctly been deleted.</string>
+
+    <!-- notedetails -->
     <string name="appbar_bookmark">bookmark</string>
+    <string name="bundle_intent_id_note">bundleIntentNoteId</string>
+
+    <!-- Mock -->
+    <string name="notedetails_mock_title">Valar Morghulis</string>
+    <string name="notedetails_mock_content">veritatis et quasi <i>architecto</i> beatae vitae dicta sunt, explicabo.\n Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur </string>
+    <string name="notedetails_appbar_delete">Delete</string>
+    <string name="notedetails_appbar_edit">Edit</string>
+    <string name="notedetails_appbar_search">Search</string>
+
+    <string name="notedetails_note_deleted">Note deleted.</string>
+    <string name="notedetails_note_undo_delete">Undo</string>
+    <string name="notedetails_appbar_hint_search">Search...</string>
 </resources>

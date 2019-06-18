@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="AppCompatResource"
     tools:context=".presentation.DashboardActivity">
 
-    <!-- Bookmak -->
+    <!-- Bookmark -->
     <item
         android:id="@+id/action_bookmark_notedetails"
         android:icon="@drawable/ic_bookmark_border_black_24dp"
         android:title="@string/appbar_bookmark"
         android:showAsAction="always" />
+
+    <!-- Search -->
+    <item
+        android:id="@+id/action_search_notedetails"
+        android:title="@string/notedetails_appbar_search"
+        android:showAsAction="collapseActionView"
+        android:actionViewClass="android.widget.SearchView"/>
+
+
+    <!-- Delete -->
+    <item
+        android:id="@+id/action_delete_notedetails"
+        android:title="@string/notedetails_appbar_delete"
+        android:showAsAction="never" />
 
 </menu>

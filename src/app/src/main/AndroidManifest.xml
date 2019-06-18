@@ -19,5 +19,6 @@
         <activity android:name=".features.insertnote.InsertNoteActivity" />
         <activity android:name=".features.listnote.ListNoteActivity" />
         <activity android:name=".features.notedetails.NoteDetailsActivity" />
+        <activity android:name=".features.editnote.EditNoteActivity" />
     </application>
 </manifest>

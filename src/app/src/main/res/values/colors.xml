@@ -5,4 +5,5 @@
     <color name="colorAccent">@android:color/black</color>
 
     <color name="colorLightGray">#e8e7ea</color>
+    <color name="colorTextHightlight">#62e6c8</color>
 </resources>
