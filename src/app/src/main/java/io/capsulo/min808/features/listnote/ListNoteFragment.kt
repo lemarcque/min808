@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
 import io.capsulo.min808.core.navigation.Navigator
@@ -46,10 +45,11 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.getNotesLiveData().observe(this, Observer {
+        viewModel.notesLiveData?.observe(this, Observer {
             val adapter = recyclerview_listnote.adapter as ListNoteAdapter
             adapter.update(it.toMutableList())
         })
+        viewModel.notesDeletedLiveData?.observe(this, Observer { refreshList() })
     }
 
     private fun setInterface() {
@@ -104,20 +104,18 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
         Navigator.showNoteDetails(context!!, bundle)
     }
 
-    override fun onItemDelete(position: Int) {
+    override fun onItemDelete(id: Int) {
         // Show snackbar with action
         val view = activity!!.findViewById<View>(android.R.id.content)
-        val snackbar = Snackbar
+        Snackbar
             .make(view, R.string.notedetails_note_deleted, Snackbar.LENGTH_SHORT)
-            .setAction(R.string.notedetails_note_undo_delete) { mAdapter.update(position) }
+            .setAction(R.string.notedetails_note_undo_delete) { mAdapter.update(id) }
             .setActionTextColor(Color.WHITE)
             .addCallback(object : Snackbar.Callback() {
                 override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                     if (event == DISMISS_EVENT_TIMEOUT) {
                         // Snackbar closed on its own
-                        // TODO : Implement this features
-                        println("YES")
-                        //viewModel.deleteNote()
+                        viewModel.deleteNote(id)
                     }
                 }
             })

@@ -15,18 +15,24 @@ import polanski.option.Option.none
  * Class responsible to provide data to the UI and survive configuration changes.
  * Acts as a communication center between the Repository and the UI.
  */
-class ListNoteViewModel(val interactor: RetrieveNoteList, val deleteNote: DeleteNote) : ViewModel() {
+class ListNoteViewModel(private val interactor: RetrieveNoteList,
+                        private val deleteNote: DeleteNote) : ViewModel() {
 
-    private var notesLiveData: MutableLiveData<List<NoteView>>? = null
-
-
-    fun getNotesLiveData(): MutableLiveData<List<NoteView>> {
-        if(notesLiveData == null) {
-            notesLiveData = MutableLiveData()
-            getNotes("")
+    var notesLiveData: MutableLiveData<List<NoteView>>? = null
+        get() {
+            if(field == null) {
+                field = MutableLiveData()
+                getNotes("")
+            }
+            return field as MutableLiveData<List<NoteView>>
         }
-        return notesLiveData as MutableLiveData<List<NoteView>>
-    }
+    var notesDeletedLiveData: MutableLiveData<Boolean>? = null
+        get() {
+            if(field == null) {
+            field = MutableLiveData()
+            getNotes("") }
+            return field as MutableLiveData<Boolean>
+        }
 
     fun getNotes(filter: String) {
         interactor
@@ -47,8 +53,6 @@ class ListNoteViewModel(val interactor: RetrieveNoteList, val deleteNote: Delete
         .getSingle(Option.ofObj(id))
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe()
-
-
+        .subscribe({ println("deleted correctly."); notesDeletedLiveData?.postValue(true)}, { println("error while deleting.")})
 
 }

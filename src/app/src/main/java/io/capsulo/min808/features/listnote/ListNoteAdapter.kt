@@ -14,6 +14,7 @@ import java.util.*
 class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<ListNoteAdapter.ViewHolder>() {
 
     private var listNote: MutableList<NoteView> = mutableListOf()
+    private var recentlyDeletedItemPosition: Int = -1
     private var recentlyDeletedItem: NoteView? = null
 
     constructor(notes: MutableList<NoteView>, listener: OnItemClickListener): this(listener) {
@@ -42,7 +43,7 @@ class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<
 
     interface OnItemClickListener {
         fun onClick(id: Int)
-        fun onItemDelete(position: Int)
+        fun onItemDelete(id: Int)
     }
 
     /**
@@ -109,7 +110,8 @@ class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<
     fun onItemDismiss(position: Int) {
         recentlyDeletedItem = listNote.removeAt(position)
         notifyItemRemoved(position)
-        listener.onItemDelete(position)
+        recentlyDeletedItemPosition = position
+        listener.onItemDelete(recentlyDeletedItem?.id!!)
     }
 
     fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
@@ -131,11 +133,11 @@ class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<
         notifyDataSetChanged()
     }
 
-    fun update(position: Int) {
+    fun update(id: Int) {
         if(recentlyDeletedItem != null) {
-            listNote.add(position, recentlyDeletedItem!!)
+            listNote.add(recentlyDeletedItemPosition, recentlyDeletedItem!!)
             recentlyDeletedItem = null
-            notifyItemInserted(position)
+            notifyItemInserted(recentlyDeletedItemPosition)
         }
     }
 

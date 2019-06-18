@@ -28,9 +28,7 @@ class NoteRepository(private val store: DatabaseStore) {
 
     fun updateNote(id: Int, title: String, content: String) = store.replaceSingular(id, title, content)
 
-    fun deleteNote(id: Int): Single<Int> {
-        // map Note object to [NoteEntity]
-        return store.removeSingular(id)
-    }
+    fun deleteNote(id: Int): Single<Int> = store.removeSingular(id)
+
 
 }

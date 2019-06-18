@@ -25,6 +25,6 @@ abstract class NoteDao {
     @Query("UPDATE t_note SET content=:content, title=:title WHERE id=:id")
     abstract fun replaceSingular(id: Int, title:String, content: String): Completable
 
-    @Query("DELETE FROM t_note WHERE id = :id")
+    @Query("DELETE FROM t_note WHERE id=:id")
     abstract fun deleteSingular(id: Int): Single<Int>
 }
