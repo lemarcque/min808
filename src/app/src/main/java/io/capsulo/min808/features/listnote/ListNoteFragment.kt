@@ -57,7 +57,7 @@ class ListNoteFragment(val viewModel: ListNoteViewModel) : Fragment(), ListNoteA
         // configuration of app bar
         toolbar_listnote.inflateMenu(R.menu.appbar_listnote)
 
-        // configuration of search bar
+        // configuration of se  arch bar
         val searchView = (toolbar_listnote.menu.findItem(R.id.action_publish_insertnote).actionView as SearchView)
         searchView.apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {

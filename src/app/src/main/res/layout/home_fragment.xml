@@ -4,26 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <!-- Text : Min808 -->
-    <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:textSize="38sp"
-        android:textColor="@android:color/black"
-        android:fontFamily="@font/lora_bold"
-        android:text="@string/min_808" />-->
-
-    <!-- Min808 // Logo -->
-    <!-- <ImageView
-        android:id="@+id/imageview_logo_home"
-        android:layout_width="250dp"
-        android:layout_height="167dp"
-        android:contentDescription="@string/logo_contentdescription"
-        android:background="@drawable/logo_4"
-        android:adjustViewBounds="true"/> -->
-
     <!-- Capsulo Logo -->
     <ImageView
         android:layout_width="100dp"
