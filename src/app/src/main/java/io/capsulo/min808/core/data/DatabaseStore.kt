@@ -23,21 +23,15 @@ class DatabaseStore(private val context: Context) : ReactiveStore<Int, NoteEntit
 
     override fun storeSingular(model: NoteEntity): Completable  = Min808Database.getDatabase(context).noteDao().storeSingular(model)
 
-    override fun storeAll(modelList: List<NoteEntity>): Completable {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun storeAll(modelList: List<NoteEntity>): Completable = Completable.error(Throwable("Features not implemented"))
 
     fun removeSingular(model: Int): Single<Int> = Min808Database.getDatabase(context).noteDao().deleteSingular(model)
 
     fun replaceSingular(model: Int, title: String, content: String): Completable = Min808Database.getDatabase(context).noteDao().replaceSingular(model, title, content)
 
-    override fun replaceAll(modelList: List<NoteEntity>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun replaceAll(modelList: List<NoteEntity>) = error("Features not implemented")
 
-    override fun clear() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun clear() = error("Features not imple")
 
 
 }

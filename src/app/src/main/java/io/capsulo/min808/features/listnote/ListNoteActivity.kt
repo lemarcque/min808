@@ -56,8 +56,7 @@ class ListNoteActivity : AppCompatActivity() {
                }
            }
 
-           // TODO : Rename the request code
-           NoteDetailsActivity.DELETE_NOTE_REQUEST -> {
+           NoteDetailsActivity.UPDATE_NOTE_REQUEST -> {
                when(resultCode) {
                    Activity.RESULT_OK -> {
                        fragment?.showSnackbarMessage(getString(R.string.listnote_delete_message))

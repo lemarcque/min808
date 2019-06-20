@@ -31,7 +31,7 @@ class Navigator {
             val intent = NoteDetailsActivity.callingIntent(context)
             intent.putExtras(bundle)
             val activity = context as Activity
-            activity.startActivityForResult(intent, NoteDetailsActivity.DELETE_NOTE_REQUEST)
+            activity.startActivityForResult(intent, NoteDetailsActivity.UPDATE_NOTE_REQUEST)
         }
 
     }

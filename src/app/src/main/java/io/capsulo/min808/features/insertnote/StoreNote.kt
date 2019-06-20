@@ -36,8 +36,6 @@ class StoreNote(private val repository: NoteRepository): ReactiveInteractor.Send
 
         return if(raw.isNotEmpty() && title.isNotEmpty()) repository.insertNote(note)
             else Completable.error(Throwable(INPUT_EMPTY_ERROR))
-
-        // TODO : NPE
     }
 
 }

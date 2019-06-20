@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import java.lang.IllegalStateException
 
 /**
- * Todo : Add class description
+ * A holder that display a dialog window to confirm the delete of notes.
  */
 class DeleteNoteDialogFragment : DialogFragment() {
 

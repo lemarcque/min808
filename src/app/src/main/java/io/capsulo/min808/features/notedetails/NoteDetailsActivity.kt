@@ -20,7 +20,7 @@ class NoteDetailsActivity : AppCompatActivity() {
     val TAG: String? = NoteDetailsActivity::class.simpleName
 
     companion object {
-        const val DELETE_NOTE_REQUEST = 2
+        const val UPDATE_NOTE_REQUEST = 2
         const val UPDATE_RESULT_CODE = 3
 
         fun callingIntent(context: Context) = Intent(context, NoteDetailsActivity::class.java)

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 /**
- * Todo : Add class description
+ * Database holder extending[RoomDatabase]
  */
 @Database(entities = [NoteEntity::class], version = 1, exportSchema = false)
 abstract class Min808Database : RoomDatabase() {

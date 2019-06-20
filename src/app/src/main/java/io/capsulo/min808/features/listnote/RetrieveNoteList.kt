@@ -9,7 +9,7 @@ import io.reactivex.Single
 import polanski.option.Option
 
 /**
- * Todo : Add class description
+ * Interactor for the use case of retrieving a list of notes.
  */
 class RetrieveNoteList(private  val repository: NoteRepository):
         ReactiveInteractor.RetrieveInteractor<String, List<NoteEntity>> {
