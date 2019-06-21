@@ -18,6 +18,7 @@ import io.capsulo.min808.R
 import io.capsulo.min808.core.navigation.Navigator
 import io.capsulo.min808.core.presentation.BaseFragment
 import kotlinx.android.synthetic.main.appbar_title_notedetails.*
+import kotlinx.android.synthetic.main.listnote_container_fragment.*
 import kotlinx.android.synthetic.main.notedetails_fragment.*
 
 

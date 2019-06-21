@@ -17,4 +17,8 @@
         <item name="android:drawablePadding">5dp</item>
     </style>
 
+    <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/googlesans_regular</item>
+    </style>
+
 </resources>

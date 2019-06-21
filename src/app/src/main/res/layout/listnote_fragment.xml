@@ -1,66 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <!-- Space -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@android:color/transparent" />
+
+    <!-- Recycler view -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_listnote"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        tools:listitem="@layout/listnote_recyclerview_item">
 
-        <!-- Toolbar -->
-        <Toolbar
-            android:id="@+id/toolbar_listnote"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="center"
-            android:background="@android:color/white"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </androidx.recyclerview.widget.RecyclerView>
 
-            <!-- Custom title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Min808"
-                android:textStyle=""
-                android:fontFamily="@font/lora_bold"
-                android:textColor="@android:color/black" />
-
-        </Toolbar>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/transparent" />
-
-
-        <!-- Recycler view -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_listnote"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/listnote_recyclerview_item">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-    </LinearLayout>
-
-    <!-- FAB -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_listnote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_add_black_24dp"
-        android:layout_margin="16dp"
-        android:backgroundTint="@android:color/black"
-        android:tint="@android:color/white"/>
-
-    
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

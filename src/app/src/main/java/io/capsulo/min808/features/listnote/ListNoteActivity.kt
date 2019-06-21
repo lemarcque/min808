@@ -34,7 +34,7 @@ class ListNoteActivity : AppCompatActivity() {
         val repository = NoteRepository(DatabaseStore(this))
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.base_activity, ListNoteFragment.newInstance(
+            .add(R.id.base_activity, ListNoteContainerFragment.newInstance(
                 ListNoteViewModel(
                     RetrieveNoteList(repository),
                     DeleteNote(repository)
@@ -43,8 +43,8 @@ class ListNoteActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val fragment: ListNoteFragment? =
-            supportFragmentManager.findFragmentByTag(LISTENOTE_FRAGMENT_TAG) as ListNoteFragment
+        val fragment: ListNoteContainerFragment? =
+            supportFragmentManager.findFragmentByTag(LISTENOTE_FRAGMENT_TAG) as ListNoteContainerFragment
 
        when(requestCode) {
            InsertNoteActivity.INSERT_NOTE_REQUEST -> {
