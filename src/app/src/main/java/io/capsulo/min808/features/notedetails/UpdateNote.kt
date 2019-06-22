@@ -14,7 +14,7 @@ class UpdateNote(private  val repository: NoteRepository):
     override fun getSingle(params: Option<NoteDetailsView>): Completable {
         var completable: Completable? = null
         params.ifSome {
-            completable = repository.updateNote(it.id!!, it.title!!, it.content!!) }
+            completable = repository.updateNote(it.id!!, it.title!!, it.content!!, it.bookmarked!!) }
         return completable ?: Completable.error(Throwable("The parameter 'NoteDetailsView' is required to perform a request"))
     }
 }

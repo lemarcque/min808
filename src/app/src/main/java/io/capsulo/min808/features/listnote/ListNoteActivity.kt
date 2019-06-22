@@ -37,8 +37,8 @@ class ListNoteActivity : AppCompatActivity() {
             .add(R.id.base_activity, ListNoteContainerFragment.newInstance(
                 ListNoteViewModel(
                     RetrieveNoteList(repository),
-                    DeleteNote(repository)
-                )), LISTENOTE_FRAGMENT_TAG)
+                    DeleteNote(repository),
+                    RetrieveBookmarkedList(repository))), LISTENOTE_FRAGMENT_TAG)
             .commit()
     }
 

@@ -1,13 +1,10 @@
 package io.capsulo.min808.features.notedetails
 
 import io.capsulo.min808.core.data.NoteRepository
-import io.capsulo.min808.core.data.room.NoteEntity
 import io.capsulo.min808.core.domain.ReactiveInteractor
 import io.capsulo.min808.core.utils.CalendarUtils
-import io.reactivex.Observable
 import io.reactivex.Single
 import polanski.option.Option
-import kotlin.math.sin
 
 /**
  * Get a no from his id
@@ -23,8 +20,12 @@ class RetrieveNote(private  val repository: NoteRepository):
                 .getNote(it)
                 .map {
                     NoteDetailsView(
-                        it.id, it.title, it.content, it.author,
-                        "on ${CalendarUtils.getHumanRedableDate(it.date)} · ${minToRead(it.content)} min read"
+                        it.id,
+                        it.title,
+                        it.content,
+                        it.author,
+                        getFormattedDate(it.date, it.content),
+                        it.bookmark
                     )
                 }
         }
@@ -32,6 +33,10 @@ class RetrieveNote(private  val repository: NoteRepository):
         return single
             ?: Single.error(Throwable("The parameter 'id' is required to perform a request"))
     }
+
+
+    fun getFormattedDate(date: Long?, content: String?) =
+        "on ${CalendarUtils.getHumanRedableDate(date)} · ${minToRead(content)} min read"
 
     /**
      * Give an estimated time to read based on his content

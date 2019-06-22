@@ -11,6 +11,8 @@ data class NoteEntity(
     val author: String?,
     val title: String?,
     var content: String?,
-    var date: Long?) {
+    var date: Long?,
+    var bookmark: Boolean // TODO : Replace with an id in table 't_category'
+) {
     @PrimaryKey(autoGenerate = true) var id: Int? = null
 }

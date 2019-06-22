@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.*
 import android.text.style.BackgroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -15,10 +16,8 @@ import android.widget.Toolbar
 import androidx.core.text.clearSpans
 import androidx.lifecycle.Observer
 import io.capsulo.min808.R
-import io.capsulo.min808.core.navigation.Navigator
 import io.capsulo.min808.core.presentation.BaseFragment
 import kotlinx.android.synthetic.main.appbar_title_notedetails.*
-import kotlinx.android.synthetic.main.listnote_container_fragment.*
 import kotlinx.android.synthetic.main.notedetails_fragment.*
 
 
@@ -29,7 +28,7 @@ class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFra
 
 
     // TODO : Temporary variable
-    var BOOKMARKED: Boolean = false
+    var isBookmarked: Boolean = false
     var noteView: NoteDetailsView? = null
     var lineNumberChar = mutableListOf<Int>()
     var pointer = 0
@@ -60,7 +59,7 @@ class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFra
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.noteLiveData?.observe(this, Observer { setNote(it) })
+        viewModel.noteLiveData?.observe(this, Observer { updateNote(it) })
         viewModel.noteDeletedLiveDeta?.observe(this, Observer {
             activity!!.setResult(Activity.RESULT_OK)
             activity?.finish() })
@@ -127,10 +126,10 @@ class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFra
         // configuration of app bar
         toolbar_notedetails.inflateMenu(R.menu.appbar_notedetails)
         toolbar_notedetails.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-        toolbar_notedetails.setNavigationOnClickListener { if(!updateNote()) activity!!.finish() }
+        toolbar_notedetails.setNavigationOnClickListener { if(!saveNote()) activity!!.finish() }
         toolbar_notedetails.setOnMenuItemClickListener {
             when(it.itemId) {
-                R.id.action_bookmark_notedetails -> { bookmarkNote(it); true }
+                R.id.action_bookmark_notedetails -> { onBookmarkChange(it); true }
                 R.id.action_search_notedetails -> { displaySearchMenu(); true; }
                 R.id.action_delete_notedetails -> { deleteNote(); true; }
                 else -> false
@@ -147,30 +146,35 @@ class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFra
         else activity!!.finish()
     }
 
-    private fun setNote(note: NoteDetailsView) {
+    private fun updateNote(note: NoteDetailsView) {
         noteView = note
 
         textview_author_appbar_notedetails.text = note.author
         textview_date_appbar_notedetails.text = note.date
         textview_title_notedetails.setText(note.title)
         textview_content_notedetails.setText(note.content)
+
+        isBookmarked = note.bookmarked!!
+        updateBookmarkIcon(isBookmarked)
     }
 
-
-    // TODO : Call ViewModel's method
-    private fun bookmarkNote(item: MenuItem) {
-        if(BOOKMARKED) {
-            item.setIcon(R.drawable.ic_bookmark_border_black_24dp)
-        } else {
-            item.setIcon(R.drawable.ic_bookmark_black_24dp)
-        }
-
-        BOOKMARKED = !BOOKMARKED
+    fun updateBookmarkIcon(state: Boolean) {
+        val item = toolbar_notedetails.menu.findItem(R.id.action_bookmark_notedetails)
+        if(state) item.setIcon(R.drawable.ic_bookmark_black_24dp)
+        else item.setIcon(R.drawable.ic_bookmark_border_black_24dp)
     }
 
-    private fun updateNote(): Boolean {
+    private fun onBookmarkChange(item: MenuItem) {
+        if(isBookmarked) item.setIcon(R.drawable.ic_bookmark_border_black_24dp)
+        else item.setIcon(R.drawable.ic_bookmark_black_24dp)
+        isBookmarked = !isBookmarked
+    }
+
+    private fun saveNote(): Boolean {
+        // Comparison of the difference of data
         if(textview_title_notedetails.text.toString() != noteView?.title ||
-            textview_content_notedetails.text.toString() != noteView?.content
+            textview_content_notedetails.text.toString() != noteView?.content ||
+                    isBookmarked != noteView?.bookmarked
         ) {
             viewModel.updateNote(
                 NoteDetailsView(
@@ -178,7 +182,8 @@ class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFra
                     textview_title_notedetails.text.toString(),
                     textview_content_notedetails.text.toString(),
                     noteView?.author,
-                    noteView?.date!!)
+                    noteView?.date!!,
+                    isBookmarked)
             )
             return true
         }
@@ -267,7 +272,7 @@ class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFra
                 clearHighlight()
                 displayNormalMenu()
             }
-            Mode.VIEW -> if(!updateNote()) activity!!.finish()
+            Mode.VIEW -> if(!saveNote()) activity!!.finish()
         }
         return true
     }

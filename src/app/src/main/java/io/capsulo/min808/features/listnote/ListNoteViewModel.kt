@@ -16,27 +16,42 @@ import polanski.option.Option.none
  * Acts as a communication center between the Repository and the UI.
  */
 class ListNoteViewModel(private val interactor: RetrieveNoteList,
-                        private val deleteNote: DeleteNote) : ViewModel() {
+                        private val deleteNote: DeleteNote,
+                        private val retrieveBookmarkedList: RetrieveBookmarkedList) : ViewModel() {
 
     var notesLiveData: MutableLiveData<List<NoteView>>? = null
         get() {
             if(field == null) {
                 field = MutableLiveData()
-                getNotes("")
+                getAllNotes("")
             }
             return field as MutableLiveData<List<NoteView>>
         }
     var notesDeletedLiveData: MutableLiveData<Boolean>? = null
         get() {
             if(field == null) {
-            field = MutableLiveData()
-            getNotes("") }
+                field = MutableLiveData()
+                getAllNotes("")
+            }
             return field as MutableLiveData<Boolean>
         }
 
-    fun getNotes(filter: String) {
+    fun getAllNotes(filter: String) {
         interactor
             .getBehaviorStream(Option.ofObj(filter))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .toObservable()
+            .flatMap { Observable.fromIterable(it) }
+            .map { NoteView(it.id, it.title, it.content, CalendarUtils.getHumanRedableDate(it.date)) }
+            .toList()
+            .doOnSuccess { notesLiveData?.postValue(it) }
+            .doOnError { println(it.message) }
+            .subscribe()
+    }
+
+    fun getNotesBookmaked() {
+        retrieveBookmarkedList.getBehaviorStream(none())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .toObservable()
@@ -53,6 +68,6 @@ class ListNoteViewModel(private val interactor: RetrieveNoteList,
         .getSingle(Option.ofObj(id))
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe({ println("deleted correctly."); notesDeletedLiveData?.postValue(true)}, { println("error while deleting.")})
+        .subscribe({ notesDeletedLiveData?.postValue(true)}, { println("error while deleting.")})
 
 }

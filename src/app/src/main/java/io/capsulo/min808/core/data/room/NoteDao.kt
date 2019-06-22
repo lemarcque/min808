@@ -1,6 +1,7 @@
 package io.capsulo.min808.core.data.room
 
 import androidx.room.*
+import io.capsulo.min808.core.data.Note
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -13,6 +14,9 @@ abstract class NoteDao {
     @Query("SELECT * FROM t_note WHERE title LIKE :filter ORDER BY date DESC")
     abstract fun getAllFilter(filter: String): Single<List<NoteEntity>>
 
+    @Query("SELECT * FROM t_note WHERE bookmark = 1 ORDER BY date DESC")
+    abstract fun getAllBookarmked(): Single<List<NoteEntity>>
+
     @Query("SELECT * FROM t_note WHERE id =:id")
     abstract fun getSingular(id: Int): Single<NoteEntity>
 
@@ -22,8 +26,8 @@ abstract class NoteDao {
     @Insert
     abstract fun storeSingular(note: NoteEntity): Completable
 
-    @Query("UPDATE t_note SET content=:content, title=:title WHERE id=:id")
-    abstract fun replaceSingular(id: Int, title:String, content: String): Completable
+    @Query("UPDATE t_note SET content=:content, title=:title, bookmark=:isBookmarked WHERE id=:id")
+    abstract fun replaceSingular(id: Int, title:String, content: String, isBookmarked: Boolean): Completable
 
     @Query("DELETE FROM t_note WHERE id=:id")
     abstract fun deleteSingular(id: Int): Single<Int>

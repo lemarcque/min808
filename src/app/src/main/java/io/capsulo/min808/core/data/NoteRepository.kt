@@ -15,6 +15,8 @@ class NoteRepository(private val store: DatabaseStore) {
 
     fun getNoteListFilter(filter: String): Single<List<NoteEntity>> = store.getAllFilter(filter)
 
+    fun getNotesBookmarked(): Single<List<NoteEntity>> = store.getAllBookmarked()
+
     fun getNote(id: Int): Single<NoteEntity> = store.getSingular(id)
 
     /**
@@ -22,11 +24,11 @@ class NoteRepository(private val store: DatabaseStore) {
      */
     fun insertNote(note: Note): Completable {
         // map text to [NoteEntity]
-        val entity = NoteEntity(note.author, note.title, note.content, note.date)
+        val entity = NoteEntity(note.author, note.title, note.content, note.date, false)
         return store.storeSingular(entity)
     }
 
-    fun updateNote(id: Int, title: String, content: String) = store.replaceSingular(id, title, content)
+    fun updateNote(id: Int, title: String, content: String, isBookmarked: Boolean) = store.replaceSingular(id, title, content, isBookmarked)
 
     fun deleteNote(id: Int): Single<Int> = store.removeSingular(id)
 

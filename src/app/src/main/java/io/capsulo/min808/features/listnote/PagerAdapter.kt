@@ -9,13 +9,15 @@ import androidx.viewpager.widget.ViewPager
 /**
  * Populate pages inside of a [ViewPager]
  */
-class PagerAdapter(val fm: FragmentManager, private val viewModel: ListNoteViewModel) : FragmentPagerAdapter(fm) {
+class PagerAdapter(val fm: FragmentManager,
+                   private val viewModel: ListNoteViewModel,
+                   private val listener: ListNoteFragment.OnScrollListener) : FragmentPagerAdapter(fm) {
 
     private val tabTitle = listOf("All", "Bookmark")
 
     override fun getPageTitle(position: Int): CharSequence? = tabTitle[position]
     override fun getItem(position: Int): Fragment =
-        ListNoteFragment.newInstance(position, viewModel)
+        ListNoteFragment.newInstance(position, viewModel, listener)
     override fun getCount(): Int = tabTitle.size
 
 

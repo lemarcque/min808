@@ -9,26 +9,36 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
 import io.capsulo.min808.R.*
 import io.capsulo.min808.core.navigation.Navigator
+import kotlinx.android.synthetic.main.listnote_container_fragment.*
 import kotlinx.android.synthetic.main.listnote_fragment.*
+import java.io.Serializable
 
 /**
- * Todo : Add class description
+ * Responsible for displaying a list of notes.
  */
-class ListNoteFragment(private val viewModel: ListNoteViewModel) : Fragment(), ListNoteAdapter.OnItemClickListener {
+class ListNoteFragment(private val viewModel: ListNoteViewModel, val listener: OnScrollListener) : Fragment(), ListNoteAdapter.OnItemClickListener {
 
 
     lateinit var mAdapter: ListNoteAdapter
+    private var position: Int? = null
+    // TODO private var listener: OnScrollListener? = null
+
+    interface OnScrollListener : Serializable {
+        fun onListScrolled(hide: Boolean)
+        fun onPageScrolled(hide: Boolean)
+    }
 
     companion object {
-        fun newInstance(position: Int, viewModel: ListNoteViewModel): ListNoteFragment {
+        fun newInstance(position: Int, viewModel: ListNoteViewModel, listener: OnScrollListener): ListNoteFragment {
             val bundle = Bundle()
             bundle.putInt("position", position)
 
-            val fragment = ListNoteFragment(viewModel)
+            val fragment = ListNoteFragment(viewModel, listener)
             fragment.arguments = bundle
             return fragment
         }
@@ -54,10 +64,11 @@ class ListNoteFragment(private val viewModel: ListNoteViewModel) : Fragment(), L
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setInterface()
-
     }
 
     private fun setInterface() {
+        // Set position properties
+        position = arguments?.getInt("position", -1)
 
         // config recycler view
         mAdapter = ListNoteAdapter(this@ListNoteFragment)
@@ -69,16 +80,28 @@ class ListNoteFragment(private val viewModel: ListNoteViewModel) : Fragment(), L
         val callback = SimpleItemTouchHelperCallback(mAdapter, context)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview_listnote)
+
+        // Hide FAB while scrolling
+        // TODO listener = arguments?.getSerializable("scrollListener") as OnScrollListener
+
+        recyclerview_listnote.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if(dy > 0) listener?.onListScrolled(true)
+                else listener?.onListScrolled(false)
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
     }
 
     fun showSnackbarMessage(message: String) {
-        println("message => $message")
-        println("activity => $activity")
-        /*val view = activity!!.findViewById<View>(android.R.id.content)
-        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()*/
+        val view = activity!!.findViewById<View>(android.R.id.content)
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    fun refreshList() = viewModel.getNotes(getString(R.string.empty))
+    fun refreshList() {
+        if(position == 0) viewModel.getAllNotes(getString(R.string.empty))
+        else if (position == 1) viewModel.getNotesBookmaked()
+    }
 
     override fun onClick(id : Int) {
         val bundle = Bundle()

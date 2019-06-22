@@ -1,7 +1,7 @@
 package io.capsulo.min808.features.notedetails
 
 /**
- * TClass for display data in View.
+ * Class for display data in View.
  */
 data class NoteDetailsView(
     //val position: Int,
@@ -9,5 +9,6 @@ data class NoteDetailsView(
     val title: String?,
     val content: String?,
     val author: String?,
-    val date: String
+    val date: String,
+    val bookmarked: Boolean?
 )
