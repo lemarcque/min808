@@ -39,7 +39,7 @@
             android:textSize="16sp"
             tools:text="Molestiae non recusandae. Itaque earum"/>
 
-        <!-- content -->
+        <!-- Content -->
         <TextView
             android:id="@+id/content_listnote_item"
             android:layout_width="match_parent"
