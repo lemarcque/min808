@@ -14,8 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
 import io.capsulo.min808.R.*
 import io.capsulo.min808.core.navigation.Navigator
-import kotlinx.android.synthetic.main.listnote_container_fragment.*
-import kotlinx.android.synthetic.main.listnote_fragment.*
+import kotlinx.android.synthetic.main.fragment_listnote.*
 import java.io.Serializable
 
 /**
@@ -49,7 +48,7 @@ class ListNoteFragment(private val viewModel: ListNoteViewModel, val listener: O
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(layout.listnote_fragment, container, false)
+        return inflater.inflate(layout.fragment_listnote, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

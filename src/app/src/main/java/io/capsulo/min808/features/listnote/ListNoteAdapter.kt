@@ -70,7 +70,7 @@ class ListNoteAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<
      * @see .onBindViewHolder
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layout = LayoutInflater.from(parent.context).inflate(R.layout.listnote_recyclerview_item, parent, false)
+        val layout = LayoutInflater.from(parent.context).inflate(R.layout.item_listnote, parent, false)
         return ViewHolder(layout)
     }
 

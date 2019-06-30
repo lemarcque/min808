@@ -2,8 +2,6 @@ package io.capsulo.min808.features.listnote
 
 import android.app.Service
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import io.capsulo.min808.R
 import io.capsulo.min808.core.navigation.Navigator
-import kotlinx.android.synthetic.main.listnote_container_fragment.*
-import java.io.Serializable
+import kotlinx.android.synthetic.main.fragment_container_listnote.*
 
 
 /**
@@ -35,7 +32,7 @@ class ListNoteContainerFragment(private val viewModel: ListNoteViewModel) : Frag
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.listnote_container_fragment, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_container_listnote, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

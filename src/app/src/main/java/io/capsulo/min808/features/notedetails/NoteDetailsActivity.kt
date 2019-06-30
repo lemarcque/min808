@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Update
 import io.capsulo.min808.R
 import io.capsulo.min808.core.data.DatabaseStore
 import io.capsulo.min808.core.data.NoteRepository
@@ -27,7 +26,7 @@ class NoteDetailsActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.setContentView(R.layout.base_activity)
+        super.setContentView(R.layout.activity_base)
         super.onCreate(savedInstanceState)
 
         val repository = NoteRepository(DatabaseStore(this))

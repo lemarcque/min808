@@ -28,7 +28,7 @@ class ListNoteActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.setContentView(R.layout.base_activity)
+        super.setContentView(R.layout.activity_base)
         super.onCreate(savedInstanceState)
 
         val repository = NoteRepository(DatabaseStore(this))

@@ -14,7 +14,7 @@ class HomeActivity : AppCompatActivity() {
     val TAG: String? = HomeActivity::class.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.setContentView(R.layout.base_activity)
+        super.setContentView(R.layout.activity_base)
         super.onCreate(savedInstanceState)
         supportFragmentManager
             .beginTransaction()

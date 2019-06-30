@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import io.capsulo.min808.R
-import kotlinx.android.synthetic.main.insertnote_fragment.*
+import kotlinx.android.synthetic.main.fragment_insertnote.*
 
 
 /**
@@ -37,7 +37,7 @@ class InsertNoteFragment(private val viewModel: InsertNoteViewModel) : Fragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.insertnote_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_insertnote, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

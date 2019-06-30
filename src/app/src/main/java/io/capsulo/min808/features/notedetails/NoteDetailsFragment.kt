@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.*
 import android.text.style.BackgroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -18,7 +17,7 @@ import androidx.lifecycle.Observer
 import io.capsulo.min808.R
 import io.capsulo.min808.core.presentation.BaseFragment
 import kotlinx.android.synthetic.main.appbar_title_notedetails.*
-import kotlinx.android.synthetic.main.notedetails_fragment.*
+import kotlinx.android.synthetic.main.fragment_notedetails.*
 
 
 /**
@@ -72,7 +71,7 @@ class NoteDetailsFragment(private val viewModel: NoteDetailsViewModel) : BaseFra
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.notedetails_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_notedetails, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import io.capsulo.min808.R
 import io.capsulo.min808.core.data.DatabaseStore
 import io.capsulo.min808.core.data.NoteRepository
-import io.capsulo.min808.core.data.room.NoteEntity
 
 /**
  * Responsible to displaying a text area to insert note.
@@ -25,7 +24,7 @@ class InsertNoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        super.setContentView(R.layout.base_activity)
+        super.setContentView(R.layout.activity_base)
         supportFragmentManager
             .beginTransaction()
             .add(R.id.base_activity, InsertNoteFragment.newInstance(
