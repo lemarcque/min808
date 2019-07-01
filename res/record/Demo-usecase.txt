@@ -1,0 +1,13 @@
+1. Lancer l'application
+2. Scroller en haut et en bas
+3. Insérer une note
+4. Effectuer une recherche par son titre
+
+5. Aller sur une autre note l'a mettre en favoris
+6. Aller sur l'a note précédemment crée et la mettre en favoris
+7. Revenir sur l'écran de la liste et slider sur les notes favorisés
+
+8. Effectuez une recherche, Monter descendre
+9. L'a supprimer depuis l'écran qui l'affiche
+10. Supprimer une note depuis l'écran de liste, annuler
+11. Re-supprimer sans annuler

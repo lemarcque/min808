@@ -46,7 +46,8 @@ class RetrieveNote(private  val repository: NoteRepository):
             val wpm = 200
             val SPACE_CHAR = ' '
             val w = content.split(SPACE_CHAR)
-            val t = w.size / wpm
+            val textDifficulty = 1
+            val t = w.size / wpm * textDifficulty
             return if (w.size <= wpm) 1 else t
         }
         return 0

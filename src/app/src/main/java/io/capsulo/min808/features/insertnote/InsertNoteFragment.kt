@@ -1,8 +1,14 @@
 package io.capsulo.min808.features.insertnote
 
 import android.app.Activity
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
@@ -56,6 +62,26 @@ class InsertNoteFragment(private val viewModel: InsertNoteViewModel) : Fragment(
                 else -> super.onOptionsItemSelected(it)
             }
         }
+
+        // listener for edittext changing
+        edittext_note_insertnote.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val publishAction = toolbar_insertnote.menu.findItem(R.id.action_publish_insertnote)
+                publishAction.isEnabled = s!!.isNotEmpty()
+                val v = view?.findViewById<TextView>(R.id.action_publish_insertnote);
+                if(publishAction.isEnabled) (v as TextView).setTextColor(Color.BLACK)
+                else (v as TextView).setTextColor(ContextCompat.getColor(context!!, R.color.colorDisableGray))
+
+            }
+        })
+
+        // set default color of menu item
+        val v = view?.findViewById<TextView>(R.id.action_publish_insertnote);
+        (v as TextView).setTextColor(ContextCompat.getColor(context!!, R.color.colorDisableGray))
     }
 
 }
